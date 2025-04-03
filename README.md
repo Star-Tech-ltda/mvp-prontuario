@@ -2,7 +2,7 @@
 
 ## Diagrama
 
-![Diagrama do Banco de Dados](../../../../../Downloads/drawSQL-image-export-2025-04-03.png)
+![diagrama-bd.png](diagrama/diagrama-bd.png)
 
 ## 📋 Relações entre Tabelas
 
