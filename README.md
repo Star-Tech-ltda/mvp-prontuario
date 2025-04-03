@@ -2,7 +2,7 @@
 
 ## Diagrama
 
-![diagrama-bd.png](diagrama/diagrama-bd.png)
+![db-diagrama.png](diagrama/db-diagram.png)
 
 ## 📋 Relações entre Tabelas
 
