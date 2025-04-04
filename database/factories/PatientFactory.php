@@ -26,6 +26,21 @@ class PatientFactory extends Factory
             'sex' => $this->faker->randomElement([Sex::MALE->value, Sex::FEMALE->value]),
             'phone' => $this->faker->phoneNumber(),
             'address' => $this->faker->address(),
+            'internment_reason' => $this->faker->randomElement([
+                'Febre Alta',
+                'Infecção',
+                'Dor de Cabeça',
+                'Dor Abdominal',
+                'Acidente de Trânsito',
+                'Problemas Respiratórios',
+                'Insuficiência Cardíaca',
+                'Monitoramento Pós-Operatório',
+            ]),
+            'internment_date' => $this->faker->date(),
+            'internment_time' => $this->faker->time(),
+            'internment_location' => $this->faker->word(),
+            'bed' => 'Leito ' . $this->faker->numberBetween(1, 20),
+            'diagnosis' => $this->faker->words(3, true),
         ];
     }
 }

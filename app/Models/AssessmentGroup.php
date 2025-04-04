@@ -11,7 +11,7 @@ class AssessmentGroup extends Model
         'name',
     ];
 
-    public function options(): HasMany
+    public function assessmentOptions(): HasMany
     {
         return $this->hasMany(AssessmentOption::class);
     }
