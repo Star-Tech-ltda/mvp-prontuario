@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enums\Sex;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Patient extends Model
 {
-    protected $table = [
+    use HasFactory;
+
+    protected $fillable = [
       'name',
       'birth_date',
       'cpf',
