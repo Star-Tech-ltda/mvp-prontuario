@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\AssessmentGroup;
+use App\Models\Patient;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,11 +15,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        Patient::factory()->count(5)->create();
+
+        $groups = [
+            'ESTADO NUTRICIONAL', 'NÍVEL DE CONSCIÊNCIA', 'MOVIMENTAÇÃO', 'PELE/TECIDOS',
+            'CRÂNIO', 'ABDÔMEN', 'OLHOS', 'OUVIDOS', 'NARIZ', 'BOCA', 'PESCOÇO', 'TÓRAX',
+            'MAMAS', 'OXIGENAÇÃO', 'DIETA HOSPITALAR', 'VIAS DE ALIMENTAÇÃO', 'TIPOS DE CURATIVO',
+            'CONTEÚDO DE CURATIVOS', 'CONTEÚDO MICROBIANO', 'SONDAGEM', 'GENITURINÁRIO',
+            'MEMBROS SUPERIORES', 'MEMBROS INFERIORES', 'ELIMINAÇÃO INTESTINAL'
+        ];
+
+        foreach ($groups as $group) {
+            AssessmentGroup::create(['name' => $group]);
+        }
+
+//        User::factory()->create([
+//            'name' => 'Test User',
+//            'email' => 'test@example.com',
+//        ]);
     }
 }
