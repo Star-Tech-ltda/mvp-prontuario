@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('calculated_metrics', function (Blueprint $table) {
             $table->id();
+            // Tipo de cálculo realizado
+            $table->enum('calculated_type', ['BMI', 'BloodPressure', 'HeartRate', 'RespiratoryRate', 'OxygenSaturation', 'Temperature'])
+                ->nullable()
+                ->comment('Define qual o tipo de calculo foi feito');
+            $table->string('result')->nullable();//resultado do calculo
+            $table->string('interpretation')->nullable();// interpretacao feita automaticamente atraves do resultado
             $table->timestamps();
         });
     }

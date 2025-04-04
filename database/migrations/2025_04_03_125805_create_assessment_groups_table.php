@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('assessment_groups', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique(); // nome do grupo ( ex: nariz, braço...)
             $table->timestamps();
         });
     }

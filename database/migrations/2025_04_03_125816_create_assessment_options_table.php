@@ -7,12 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Essa tabela eh pra cadastrar as opções de cada grupo do corpo
+     * Ex: cadastrar a opção "Nariz com corrimento de sangue" para o grupo Nariz
      */
     public function up(): void
     {
         Schema::create('assessment_options', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('assessment_group_id')->constrained()->onDelete('cascade');
+            $table->string('description');// descrição
+            $table->text('custom_phrase');//Frase customizada pra usar de monstagem de texto
+            $table->enum('severity', ['None', 'Low', 'Medium', 'High', 'Critical'])->default('None');
             $table->timestamps();
         });
     }
