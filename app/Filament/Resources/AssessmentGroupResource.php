@@ -30,8 +30,7 @@ class AssessmentGroupResource extends Resource
     protected static ?string $navigationGroup = 'Administração';
 
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    protected static ?string $navigationIcon = 'vaadin-form';
     public static function form(Form $form): Form
     {
         return $form

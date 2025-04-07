@@ -19,7 +19,7 @@ class AssessmentOptionResource extends Resource
 {
     protected static ?string $model = AssessmentOption::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'bx-select-multiple';
     protected static ?string $navigationGroup = 'Administração';
 
     public static function getModelLabel(): string
