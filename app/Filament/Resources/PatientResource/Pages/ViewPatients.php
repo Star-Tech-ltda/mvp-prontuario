@@ -3,21 +3,18 @@
 namespace App\Filament\Resources\PatientResource\Pages;
 
 use App\Filament\Resources\PatientResource;
+use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationManager;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
-class ViewPatient extends ViewRecord
+class ViewPatients extends ViewRecord
 {
     protected static string $resource = PatientResource::class;
 
-    protected function hasRelationManagers(): bool
+    public function getRelationManagers(): array
     {
-        return true;
+        return [
+            EvolutionsRelationManager::class,
+        ];
     }
-
-    protected function hasFormActions(): bool
-    {
-        return true;
-    }
-
 }

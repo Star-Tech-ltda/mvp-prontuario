@@ -10,6 +10,7 @@ use App\Models\Evolution;
 use App\Models\EvolutionChecklist;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -34,9 +35,10 @@ class EvolutionResource extends Resource
         return $form
             ->schema([
 
-
-                Forms\Components\DatePicker::make('date')
-                    ->required(),
+               Select::make('patient_id')
+                   ->relationship('patient', 'name')
+                   ->label('Paciente')
+                ->required(),
 
                 Forms\Components\Textarea::make('observation')
                     ->label('Observações')
@@ -67,10 +69,12 @@ class EvolutionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('patient_id.name')
+                Tables\Columns\TextColumn::make('patient.name')
+                    ->label('Paciente')
                 ->label('Paciente'),
 
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Realizado em')
                     ->dateTime()
                     ->sortable()
                   ,
@@ -87,6 +91,8 @@ class EvolutionResource extends Resource
                 ]),
             ]);
     }
+
+
 
     public static function getRelations(): array
     {

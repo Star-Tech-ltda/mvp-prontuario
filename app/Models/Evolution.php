@@ -40,4 +40,14 @@ class Evolution extends Model
     {
         return $this->hasOne(BiometricData::class);
     }
+
+    public function checklistOptions()
+    {
+        return $this->belongsToMany(AssessmentOption::class,
+            'evolution_checklist',
+            'evolution_id',
+            'assessment_option_id'
+        );
+    }
+
 }

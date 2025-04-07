@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Sex;
 use App\Filament\Resources\PatientResource\Pages;
 use App\Filament\Resources\PatientResource\RelationManagers;
-use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationsManager;
+use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationManager;
 use App\Models\Patient;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -105,7 +105,8 @@ class PatientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            EvolutionsRelationManager::class,
+
         ];
     }
 
@@ -113,8 +114,8 @@ class PatientResource extends Resource
     {
         return [
             'index' => Pages\ListPatients::route('/'),
+            'view' => Pages\ViewPatients::route('/{record}'),
             'create' => Pages\CreatePatient::route('/create'),
-            'view' => Pages\ViewPatient::route('/{record}'),
             'edit' => Pages\EditPatient::route('/{record}/edit'),
         ];
     }
