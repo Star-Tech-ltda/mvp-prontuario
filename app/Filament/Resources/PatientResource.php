@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\Sex;
 use App\Filament\Resources\PatientResource\Pages;
 use App\Filament\Resources\PatientResource\RelationManagers;
+use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationsManager;
 use App\Models\Patient;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -21,7 +22,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PatientResource extends Resource
 {
     protected static ?string $model = Patient::class;
-
+    protected static ?string $navigationGroup = 'Enfermagem';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 1;
     public static function getModelLabel(): string
     {
         return 'Paciente';
@@ -32,7 +35,6 @@ class PatientResource extends Resource
         return 'Pacientes';
     }
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -77,7 +79,7 @@ class PatientResource extends Resource
                         ->formatStateUsing(fn (Sex $state) => '<span class="font-bold">SEXO:</span> ' . $state->label()),
                      Tables\Columns\TextColumn::make('bed')
                         ->html()
-                         ->formatStateUsing(fn ($state) => '<span class="font-bold">LEITO:</span> <span class="text-green-600">' . $state . '</span>'),
+                         ->formatStateUsing(fn ($state) => '<span class="font-bold">LEITO:</span> <span class="underline">' . $state . '</span>'),
 
                     Tables\Columns\TextColumn::make('internment_reason')
                         ->label('Motivo da Internação')
@@ -90,6 +92,7 @@ class PatientResource extends Resource
             ])
             ->paginated([18, 36, 72, 'all'])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -111,6 +114,7 @@ class PatientResource extends Resource
         return [
             'index' => Pages\ListPatients::route('/'),
             'create' => Pages\CreatePatient::route('/create'),
+            'view' => Pages\ViewPatient::route('/{record}'),
             'edit' => Pages\EditPatient::route('/{record}/edit'),
         ];
     }

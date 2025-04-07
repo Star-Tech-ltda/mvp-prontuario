@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-
+use App\Models\EvolutionChecklist;
 class Evolution extends Model
 {
     protected $fillable = [
@@ -17,6 +18,17 @@ class Evolution extends Model
     public function patient(): BelongsTo
     {
         return $this->belongsTo(Patient::class);
+    }
+    public function assessmentOptions(): BelongsToMany
+    {
+        return $this->belongsToMany(AssessmentOption::class, 'evolution_checklist')
+            ->using(EvolutionChecklist::class)
+            ->withTimestamps();
+    }
+
+    public function evolutionChecklists(): HasMany
+    {
+        return $this->hasMany(EvolutionChecklist::class);
     }
 
     public function calculatedMetrics(): HasMany

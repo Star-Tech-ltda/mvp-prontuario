@@ -19,13 +19,16 @@ class AssessmentGroupResource extends Resource
     protected static ?string $model = AssessmentGroup::class;
     public static function getModelLabel(): string
     {
-        return 'Grupo aara Evolução';
+        return 'Grupo ';
     }
 
     public static function getPluralModelLabel(): string
     {
         return 'Grupos Para Evolução';
     }
+
+    protected static ?string $navigationGroup = 'Administração';
+
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Severity;
 use App\Filament\Resources\AssessmentOptionResource\Pages;
 use App\Filament\Resources\AssessmentOptionResource\RelationManagers;
 use App\Models\AssessmentOption;
@@ -19,7 +20,17 @@ class AssessmentOptionResource extends Resource
     protected static ?string $model = AssessmentOption::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Administração';
 
+    public static function getModelLabel(): string
+    {
+        return 'Opção ';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Opções por Grupo';
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -33,8 +44,10 @@ class AssessmentOptionResource extends Resource
                 Forms\Components\Textarea::make('custom_phrase')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('severity')
-                    ->required(),
+                Forms\Components\Select::make('severity')
+                    ->required()
+                ->options(collect(Severity::cases())->mapWithKeys(fn ($case)=> [$case->value=> $case->label()]))
+                ->label('Gravidade'),
             ]);
     }
 
