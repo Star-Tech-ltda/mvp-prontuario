@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
         ], 'boxicons');
         FilamentIcon::register([
             'vaadin-form' => 'vaadin-form',
-        ], 'vaadin-icons'); // <- tem que bater com o nome do set real
+        ], 'vaadin-icons'); //icone do AssessmentGroupResource
 
 
     }
