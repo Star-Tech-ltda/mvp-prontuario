@@ -76,7 +76,6 @@ class EditEvolution extends EditRecord
                         AssessmentGroup::with('assessmentOptions')->get()->map(function ($group) {
                             $fieldName = "assessment_options_group_{$group->id}";
 
-                            \Log::info(' agora Criando checkbox em EditEvolution para: ' . $fieldName);
 
                             return Section::make($group->name)
                                 ->schema([

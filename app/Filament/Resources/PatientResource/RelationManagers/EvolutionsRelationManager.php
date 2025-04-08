@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\PatientResource\RelationManagers;
 
 use App\Models\AssessmentGroup;
+use Filament\Actions\CreateAction;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -18,20 +19,15 @@ class EvolutionsRelationManager extends RelationManager
 
     protected static string $relationship = 'Evolutions';
 
-    public function canCreate(): bool
+    public function isReadOnly(): bool
     {
-        return true;
-    }
-
-    public function canCreateForRecord($ownerRecord): bool
-    {
-        return true;
+        return false; //ativar a criação de evoluções na página de visualização do paciente
     }
 
     protected function getHeaderActions(): array
     {
         return [
-            \Filament\Actions\CreateAction::make()
+            CreateAction::make()
             ->createAnother(true),
         ];
     }
