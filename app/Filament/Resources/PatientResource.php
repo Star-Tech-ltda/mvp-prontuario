@@ -2,16 +2,25 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\MaritalStatus;
 use App\Enums\Sex;
 use App\Filament\Resources\PatientResource\Pages;
 use App\Filament\Resources\PatientResource\RelationManagers;
 use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationManager;
 use App\Models\Patient;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\Layout\Panel;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
@@ -40,27 +49,59 @@ class PatientResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
+                    ->label('Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('birth_date'),
-                Forms\Components\TextInput::make('cpf')
+
+                DatePicker::make('birth_date')
+                ->label('Data de Nascimento'),
+
+                TextInput::make('cpf')
+                    ->label('CPF')
                     ->maxLength(14),
-                Forms\Components\TextInput::make('sex'),
-                Forms\Components\TextInput::make('phone')
+
+                Select::make('marital_status')
+                ->nullable()
+                ->options(collect(MaritalStatus::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
+                ->label('Estado Civil'),
+
+                Select::make('sex')
+                ->options(collect(Sex::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
+                ->label('Sexo'),
+
+                TextInput::make('responsible')
+                ->label('Responsável'),
+
+                TextInput::make('phone')
+                    ->label('Telefone')
                     ->tel()
                     ->maxLength(20),
-                Forms\Components\TextInput::make('address')
+
+                TextInput::make('address')
+                    ->label('Endereço')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('internment_reason')
+
+                TextInput::make('internment_reason')
+                    ->label('Motivo da Internação')
                     ->maxLength(255),
-                Forms\Components\DatePicker::make('internment_date'),
-                Forms\Components\TextInput::make('internment_time'),
-                Forms\Components\TextInput::make('internment_location')
+
+                DatePicker::make('internment_date'),
+
+                Forms\Components\TimePicker::make('internment_time')
+                ->label('Hora da Internação')
+                ,
+
+                TextInput::make('internment_location')
+                    ->label('Local da Internação')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('bed')
+
+                TextInput::make('bed')
+                    ->label('Leito')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('diagnosis')
+
+                TextInput::make('diagnosis')
+                    ->label('Diagnostico')
                     ->maxLength(255),
             ]);
     }
@@ -72,18 +113,30 @@ class PatientResource extends Resource
                 Stack::make([
                     Tables\Columns\TextColumn::make('name')
                         ->html()
-                        ->formatStateUsing(fn ($state) => '<span class="font-bold">NOME:</span> <span class="text-green-600">' . $state . '</span>'),
+                        ->formatStateUsing(function ($state) {
+                            return '<span class="font-bold text-lg text-black">' . $state . '</span>' ;
+                        }),
 
                     Tables\Columns\TextColumn::make('sex')
-                        ->html()
-                        ->formatStateUsing(fn (Sex $state) => '<span class="font-bold">SEXO:</span> ' . $state->label()),
-                     Tables\Columns\TextColumn::make('bed')
-                        ->html()
-                         ->formatStateUsing(fn ($state) => '<span class="font-bold">LEITO:</span> <span class="underline">' . $state . '</span>'),
+                        ->size(10)
+                        ->color('gray')
+                        ->formatStateUsing(function (Sex $state, $record) {
+                            $age=$record->birth_date?->age;
+                            return $state->label() .','.' ' . ($age . ' anos');
+                        }),
 
-                    Tables\Columns\TextColumn::make('internment_reason')
-                        ->label('Motivo da Internação')
-                        ->color('gray'),
+
+                    Tables\Columns\TextColumn::make('diagnosis')
+                        ->size(12)
+                        ->weight(FontWeight::Medium)
+                        ->html()
+                        ->formatStateUsing(function ($state, $record) {
+                            $bed = $record->bed;
+                            return '<span class="underline">' . $state . '</span>  <span class="text-gray-400 ">|</span> ' . ($bed ? $bed : '') ;
+                        }),
+
+
+
                 ]),
             ])
             ->contentGrid([
@@ -92,12 +145,13 @@ class PatientResource extends Resource
             ])
             ->paginated([18, 36, 72, 'all'])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make()
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -114,8 +168,8 @@ class PatientResource extends Resource
     {
         return [
             'index' => Pages\ListPatients::route('/'),
-            'view' => Pages\ViewPatients::route('/{record}'),
             'create' => Pages\CreatePatient::route('/create'),
+            'view' => Pages\ViewPatients::route('/{record}'),
             'edit' => Pages\EditPatient::route('/{record}/edit'),
         ];
     }

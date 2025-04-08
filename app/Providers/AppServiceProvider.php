@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentColor;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
             'vaadin-form' => 'vaadin-form',
         ], 'vaadin-icons'); //icone do AssessmentGroupResource
 
+        FilamentColor::register([
+           'slate'=>Color::hex('#505050')
+        ]);
 
     }
 }

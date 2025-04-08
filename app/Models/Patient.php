@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MaritalStatus;
 use App\Enums\Sex;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,9 @@ class Patient extends Model
       'name',
       'birth_date',
       'cpf',
+      'marital_status',
       'sex',
+      'responsible',
       'phone',
       'address',
       'internment_reason',
@@ -29,6 +32,7 @@ class Patient extends Model
     protected $casts = [
         'birth_date' => 'date',
         'sex'=>Sex::class,
+        'marital_status'=>MaritalStatus::class,
     ];
 
     public function evolutions(): hasMany
