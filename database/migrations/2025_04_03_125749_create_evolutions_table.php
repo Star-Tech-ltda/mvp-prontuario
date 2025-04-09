@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('evolutions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained()->onDelete('cascade');// chave referencia de paciente
+            $table->foreignId('patient_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');// usar user_id pra deixar as evoluções rastreaveis
+            $table->text('evolution-text')->nullable();//texto de evolução a ser gerado de acordo com as opções marcadas
             $table->text('observation')->nullable();
             $table->timestamps();// usar essa coluna para data de evolução
         });

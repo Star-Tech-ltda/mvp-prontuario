@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('name');  // nome do paciente
             $table->date('birth_date')->nullable(); // data de nascimento pode ser nulo
             $table->string('cpf',14)->unique()->nullable();
+            $table->enum('marital_status', ['Single','Married','Divorced','Other'])->nullable();
             $table->enum('sex', ['Male', 'Female'])->nullable(); // sexo biologico do paciente pode ser nulo
+            $table->string('responsible')->nullable(); // responsavel pelo paciente
             $table->string('phone',20)->nullable(); // telefone do paciente
             $table->string('address')->nullable(); // endereço do paciente
             $table->string('internment_reason')->nullable(); // motivo da internação
@@ -26,6 +28,7 @@ return new class extends Migration
             $table->string('bed')->nullable(); // leito
             $table->string('diagnosis')->nullable(); // diagnostico
             $table->timestamps();
+             // estado civil do paciente
         });
     }
 
