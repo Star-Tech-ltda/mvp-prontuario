@@ -32,11 +32,11 @@ class AppServiceProvider extends ServiceProvider
             'bx-select-multiple' => 'bx-select-multiple',//icone do AssessmentoptionResource
         ], 'boxicons');
         FilamentIcon::register([
-            'vaadin-form' => 'vaadin-form',
-        ], 'vaadin-icons'); //icone do AssessmentGroupResource
-
+            'fluentui-form-multiple-48-o' => 'blade-fluentui-system-icons',
+        ], 'blade-fluentui-system-icons');
         FilamentColor::register([
-           'slate'=>Color::hex('#505050')
+           'slate'=>Color::hex('#505050'),
+           'yellow' =>Color::hex('#fbff00')
         ]);
 
     }

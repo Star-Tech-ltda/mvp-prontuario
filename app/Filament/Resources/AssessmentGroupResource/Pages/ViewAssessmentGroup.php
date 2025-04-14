@@ -4,16 +4,11 @@ namespace App\Filament\Resources\AssessmentGroupResource\Pages;
 
 use App\Filament\Resources\AssessmentGroupResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class EditAssessmentGroup extends EditRecord
+class ViewAssessmentGroup extends ViewRecord
 {
     protected static string $resource = AssessmentGroupResource::class;
 
-    protected function getHeaderActions(): array
-    {
-        return [
-            Actions\DeleteAction::make(),
-        ];
-    }
+
 }

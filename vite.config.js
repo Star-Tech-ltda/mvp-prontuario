@@ -10,4 +10,10 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+// server: {
+//         hmr: {
+//             host: 'mighty-publicly-sparrow.ngrok-free.app',
+//         },
+//     },
+
 });

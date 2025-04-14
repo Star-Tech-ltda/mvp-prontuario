@@ -20,5 +20,16 @@ enum Severity: string
             self::CRITICAL=>'Crítico',
         };
     }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::NONE => 'info',
+            self::LOW => 'success',
+            self::MEDIUM => 'yellow',
+            self::HIGH => 'warning',
+            self::CRITICAL => 'danger',
+        };
+    }
 }
 

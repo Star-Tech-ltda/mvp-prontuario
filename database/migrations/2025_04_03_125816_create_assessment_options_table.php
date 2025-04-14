@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('assessment_group_id')->constrained()->onDelete('cascade');
             $table->string('description');// descrição
-            $table->text('custom_phrase');//Frase customizada pra usar de monstagem de texto
             $table->enum('severity', ['None', 'Low', 'Medium', 'High', 'Critical'])->default('None');
             $table->timestamps();
         });

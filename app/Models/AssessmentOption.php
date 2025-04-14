@@ -12,7 +12,6 @@ class AssessmentOption extends Model
     protected $fillable = [
         'assessment_group_id',
         'description',
-        'custom_phrase',
         'severity',
     ];
 

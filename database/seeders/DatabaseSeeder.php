@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
                 Severity::HIGH->value => 'Lesões extensas, infecção visível ou dor persistente.',
                 Severity::CRITICAL->value => 'Abscesso com risco sistêmico ou comprometimento das vias aéreas.',
             ],
-            'CRANIO' => [
+            'CRÂNIO' => [
                 Severity::NONE->value => 'Sem alterações visíveis ou dor à palpação.',
                 Severity::LOW->value => 'Pequena área sensível ou hematoma superficial.',
                 Severity::MEDIUM->value => 'Trauma leve a moderado com desconforto persistente.',
