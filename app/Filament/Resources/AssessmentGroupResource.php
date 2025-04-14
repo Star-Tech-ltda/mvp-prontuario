@@ -34,8 +34,7 @@ protected static ?string $navigationIcon = 'fluentui-form-multiple-48-o';
             ->schema([
                 TextInput::make('name')
                     ->label('Nome do Grupo')
-                     ->helperText('')
-                     ->debounce(200)
+                     ->debounce(500)
                      ->afterStateUpdated(
                         function (callable $set, $state) {
                             $set('Preview', strtoupper($state));

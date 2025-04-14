@@ -8,13 +8,19 @@ use App\Filament\Resources\PatientResource\Pages;
 use App\Filament\Resources\PatientResource\RelationManagers;
 use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationManager;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -27,6 +33,7 @@ use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Log;
 
 class PatientResource extends Resource
 {
@@ -44,66 +51,130 @@ class PatientResource extends Resource
         return 'Pacientes';
     }
 
+    public static function calculateAge(?string $date): string
+    {
+        if (! $date) return '-';
+
+        return \Carbon\Carbon::parse($date)
+            ->diff(now())
+            ->format('%y anos e %m meses');
+    }
+
+
 
     public static function form(Form $form): Form
     {
         return $form
+
             ->schema([
-                TextInput::make('name')
-                    ->label('Nome')
-                    ->required()
-                    ->maxLength(255),
 
-                DatePicker::make('birth_date')
-                ->label('Data de Nascimento'),
+                Section::make('Indentificacao do Paciente')
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('Nome')
+                            ->required()
+                            ->maxLength(255)
+                            ->columnSpan(1),
 
-                TextInput::make('cpf')
-                    ->label('CPF')
-                    ->maxLength(14),
+                        DatePicker::make('birth_date')
+                            ->native(false)
+                            ->closeOnDateSelection()
+                            ->displayFormat('d/m/Y')
+                            ->label('Data de Nascimento')
+                            ->reactive()
+                            ->columnSpan(1),
 
-                Select::make('marital_status')
-                ->nullable()
-                ->options(collect(MaritalStatus::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
-                ->label('Estado Civil'),
+                        Placeholder::make('calculated_age')
+                            ->label('Idade')
+                            ->content(fn ($get) => PatientResource::calculateAge($get('birth_date')))                        ,
 
-                Select::make('sex')
-                ->options(collect(Sex::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
-                ->label('Sexo'),
+                        TextInput::make('cpf')
+                            ->label('CPF')
+                            ->mask(RawJs::make("'999.999.999-99'"))
+                            ->maxLength(14)
+                            ->columnSpan(1),
 
-                TextInput::make('responsible')
-                ->label('Responsável'),
+                        Select::make('sex')
+                            ->options(collect(Sex::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
+                            ->label('Sexo'),
 
-                TextInput::make('phone')
-                    ->label('Telefone')
-                    ->tel()
-                    ->maxLength(20),
+                        Select::make('marital_status')
+                            ->nullable()
+                            ->options(collect(MaritalStatus::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
+                            ->label('Estado Civil'),
 
-                TextInput::make('address')
-                    ->label('Endereço')
-                    ->maxLength(255),
 
-                TextInput::make('internment_reason')
-                    ->label('Motivo da Internação')
-                    ->maxLength(255),
 
-                DatePicker::make('internment_date'),
+                        TextInput::make('responsible')
+                            ->label('Responsável'),
 
-                Forms\Components\TimePicker::make('internment_time')
-                ->label('Hora da Internação')
-                ,
+                        TextInput::make('phone')
+                            ->label('Telefone')
+                            ->mask(RawJs::make("'(99) 9999-9999'"))
+                            ->tel()
+                            ->maxLength(20),
 
-                TextInput::make('internment_location')
-                    ->label('Local da Internação')
-                    ->maxLength(255),
+                        TextInput::make('address')
+                            ->label('Endereço')
+                            ->maxLength(255),
 
-                TextInput::make('bed')
-                    ->label('Leito')
-                    ->maxLength(255),
 
-                TextInput::make('diagnosis')
-                    ->label('Diagnostico')
-                    ->maxLength(255),
-            ]);
+                ])->columns(3),
+                Section::make('Informações de internação ')
+                    ->schema([
+                        TextInput::make('internment_reason')
+                            ->label('Motivo da Internação')
+                            ->maxLength(255)
+                        ->columnSpan(2),
+
+
+
+                        DatePicker::make('internment_date')
+                            ->label('Data da Internação')
+                            ->native(false)
+                            ->reactive()
+                            ->displayFormat('d/m/Y')
+                            ->suffixAction(fn () =>
+                            Action::make('hoje')
+                                ->label('Hoje')
+                                ->icon('mdi-calendar-star-four-points')
+                                ->action(fn ($set) => $set('internment_date', now()->toDateString()))
+                            ),
+
+
+
+                        TimePicker::make('internment_time')
+                            ->label('Hora da Internação')
+                            ->reactive()
+                            ->suffixAction(
+                                Action::make('hora-atual')
+                                    ->icon('mdi-clock-star-four-points-outline')
+                                    ->action(function ($set) {
+                                        $time = now()->format('H:i:s');
+                                        $set('internment_time', $time);
+                                    })
+                            ),
+
+
+
+
+
+
+                        TextInput::make('internment_location')
+                            ->label('Local da Internação')
+                            ->maxLength(255),
+
+                        TextInput::make('bed')
+                            ->label('Leito')
+                            ->maxLength(255),
+
+                        TextInput::make('diagnosis')
+                            ->label('Diagnostico')
+                            ->maxLength(255)
+                            ->columnSpan(2),
+                    ])->columns(4),
+
+            ]) ;
     }
 
     public static function table(Table $table): Table
@@ -132,7 +203,7 @@ class PatientResource extends Resource
                         ->html()
                         ->formatStateUsing(function ($state, $record) {
                             $bed = $record->bed;
-                            return '<span class="underline">' . $state . '</span>  <span class="text-gray-400 ">|</span> ' . ($bed ? $bed : '') ;
+                            return '<span class="underline">' . $state . '</span>  <span class="text-gray-400 ">|Leito:</span> ' . ($bed ? $bed : '') ;
                         }),
 
 
