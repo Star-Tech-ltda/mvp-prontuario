@@ -41,6 +41,8 @@ class EvolutionResource extends Resource
             ->schema([
                     Wizard::make([
                         Step::make('Sinais Vitais')
+                            ->description('Selecione corretamente o paciente')
+                            ->completedIcon('heroicon-o-check-circle')
                             ->schema([
                                Grid::make(1)
                                    ->schema([
@@ -48,6 +50,9 @@ class EvolutionResource extends Resource
                                            ->relationship('patient', 'name')
                                            ->label('Paciente')
                                            ->required()
+                                           ->validationMessages([
+                                               'required' => 'Selecione um paciente',
+                                           ])
                                            ->live()
                                            ->suffixIcon('fluentui-person-12-o')
                                            ->afterStateUpdated(function (callable $set, $state) {
@@ -156,6 +161,7 @@ class EvolutionResource extends Resource
                                 ]),
 
                         Step::make('Checklist')
+                            ->description('Selecione conforme o estado do Paciente')
                             ->schema([
                                 ...AssessmentGroup::with('assessmentOptions')->get()->map(function ($group) {
                                     return Section::make($group->name)
@@ -169,8 +175,12 @@ class EvolutionResource extends Resource
                                         ->collapsible();
                                 })->toArray(),
 
+                            ]),
+                        Step::make('Final')
+                            ->description('Finalize a evolução do paciente')
+                            ->schema([
                                 Textarea::make('observation')
-                                    ->label('Observações')
+                                    ->label('Queixas e Observações')
                                     ->rows(3)
                                     ->nullable(),
                             ]),

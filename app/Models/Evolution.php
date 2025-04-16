@@ -41,7 +41,7 @@ class Evolution extends Model
         return $this->hasOne(BiometricData::class);
     }
 
-    public function checklistOptions()
+    public function checklistOptions(): belongsToMany
     {
         return $this->belongsToMany(AssessmentOption::class,
             'evolution_checklist',
@@ -49,5 +49,10 @@ class Evolution extends Model
             'assessment_option_id'
         );
     }
+    public function text(): HasOne
+    {
+        return $this->hasOne(EvolutionText::class);
+    }
+
 
 }
