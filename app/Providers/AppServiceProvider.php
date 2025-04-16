@@ -28,18 +28,18 @@ class AppServiceProvider extends ServiceProvider
             App::setLocale('pt_BR');
         });
 
-        FilamentIcon::register([
-            'bx-select-multiple' => 'bx-select-multiple',//icone do AssessmentoptionResource
-        ], 'boxicons');
-        FilamentIcon::register([
-            'fluentui-form-multiple-48-o' => 'blade-fluentui-system-icons',
-        ], 'blade-fluentui-system-icons');
-        FilamentIcon::register([
-            'mdi-calendar-star-four-points' => 'mdi-calendar-star-four-points',
-        ], 'blade-mdi'); // icone do botao pra gerar data atual do form patient
-        FilamentIcon::register([
-            'mdi-clock-star-four-points-outline' => 'mdi-clock-star-four-points-outline',
-        ], 'blade-mdi'); // icone do botao pra gerar hora atual do form patient
+//        FilamentIcon::register([
+//            'bx-select-multiple' => 'bx-select-multiple',//icone do AssessmentoptionResource
+//        ], 'boxicons');
+//        FilamentIcon::register([
+//            'fluentui-form-multiple-48-o' => 'blade-fluentui-system-icons',
+//        ], 'blade-fluentui-system-icons');
+//        FilamentIcon::register([
+//            'mdi-calendar-star-four-points' => 'mdi-calendar-star-four-points',
+//        ], 'blade-mdi'); // icone do botao pra gerar data atual do form patient
+//        FilamentIcon::register([
+//            'mdi-clock-star-four-points-outline' => 'mdi-clock-star-four-points-outline',
+//        ], 'blade-mdi'); // icone do botao pra gerar hora atual do form patient
         FilamentColor::register([
            'slate'=>Color::hex('#505050'),
            'yellow' =>Color::hex('#fbff00')

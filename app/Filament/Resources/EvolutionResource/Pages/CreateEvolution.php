@@ -17,7 +17,6 @@ class CreateEvolution extends CreateRecord
 
         $state = $this->form->getState();
 
-        Log::info('Estado do formulário:', $state);
 
         $selectedOptionIds = collect($state)
             ->filter(fn($value, $key) => str_starts_with($key, 'assessment_options_group_'))
@@ -26,7 +25,6 @@ class CreateEvolution extends CreateRecord
             ->values()
             ->all();
 
-        Log::info('IDs selecionados para salvar:', $selectedOptionIds);
 
         $record->assessmentOptions()->sync($selectedOptionIds);
     }
