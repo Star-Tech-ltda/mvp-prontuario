@@ -4,6 +4,7 @@ namespace App\Filament\Resources\AssessmentGroupResource\Pages;
 
 use App\Filament\Resources\AssessmentGroupResource;
 use Filament\Actions;
+use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRecords;
 
 class ManageAssessmentGroups extends ManageRecords
@@ -13,7 +14,7 @@ class ManageAssessmentGroups extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->slideOver('left'),
+            CreateAction::make()->slideOver('left'),
         ];
     }
 

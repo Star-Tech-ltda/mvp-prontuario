@@ -19,6 +19,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 class AssessmentGroupResource extends Resource
 {
@@ -34,18 +35,18 @@ protected static ?string $navigationIcon = 'fluentui-form-multiple-48-o';
             ->schema([
                 TextInput::make('name')
                     ->label('Nome do Grupo')
-                     ->debounce(500)
-                     ->afterStateUpdated(
-                        function (callable $set, $state) {
-                            $set('Preview', strtoupper($state));
-                        })
+                    ->debounce(500)
+                    ->afterStateUpdated(function (callable $set, $state) {
+                        $set('Preview', strtoupper($state));
+                        $set('slug', Str::slug($state));
+                    })
                     ->required()
-                    ->maxLength(255)
-                ,
-                Placeholder::make('Obs')
-                ->label('')
+                    ->maxLength(255),
 
-                ,
+                TextInput::make('slug')
+                    ->label('Slug')
+                    ->required(),
+
                 Section::make('Pré-visualização')
                     ->description('É assim que vai ficar no formulário')
                         ->schema([
