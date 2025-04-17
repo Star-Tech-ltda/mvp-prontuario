@@ -11,6 +11,7 @@
         "codeat3/blade-vaadin-icons": "^1.6",
         "diogogpinto/filament-auth-ui-enhancer": "^1.0",
         "filament/filament": "^3.3",
+        "hasnayeen/themes": "^3.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "mallardduck/blade-boxicons": "^2.4",
