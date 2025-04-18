@@ -186,7 +186,7 @@ class EvolutionResource extends Resource
                             ]),
                     ])->columnSpan('full')
 
-            ]);
+            ])  ;
     }
 
 

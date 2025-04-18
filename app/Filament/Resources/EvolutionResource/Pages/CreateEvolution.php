@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\EvolutionResource\Pages;
 
 use App\Filament\Resources\EvolutionResource;
+use App\Services\MetricInterpreterService;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Log;
@@ -27,5 +28,7 @@ class CreateEvolution extends CreateRecord
 
 
         $record->assessmentOptions()->sync($selectedOptionIds);
+
+        MetricInterpreterService::handle($state, $record->id);
     }
 }

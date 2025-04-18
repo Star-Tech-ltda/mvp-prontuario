@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\BiometricData;
+use App\Observers\BiometricDataObserver;
 use Filament\Facades\Filament;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
@@ -24,6 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+
+
+
+
         Filament::serving(function () {
             App::setLocale('pt_BR');
         });
