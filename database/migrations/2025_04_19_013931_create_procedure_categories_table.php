@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('procedure_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('cost_type', ["unidade","uso","serviço","percentual","km","hora","mes","fixo"]);
+            $table->enum('cost_type', ["Unity","Use","Service","Percent","Kilometer","Time","Month","Fixed"]);
             $table->text('description');
         });
     }
