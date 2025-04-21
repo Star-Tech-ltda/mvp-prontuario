@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Budget extends Model
 {
@@ -37,13 +38,13 @@ class Budget extends Model
         return $this->belongsTo(TimeContext::class);
     }
 
-    public function expenses(): BelongsToMany
+    public function budgetExpense(): HasMany
     {
-        return $this->belongsToMany(Expense::class);
+        return $this->hasMany(BudgetExpense::class);
     }
 
-    public function procedures(): BelongsToMany
+    public function budgetProcedure(): HasMany
     {
-        return $this->belongsToMany(Procedure::class);
+        return $this->hasMany(BudgetProcedure::class);
     }
 }
