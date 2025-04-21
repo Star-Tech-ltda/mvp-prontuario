@@ -1,0 +1,33 @@
+// https://aka.ms/devcontainer.json
+// ⚠️ ATTENTION : Define WWWGROUP=1000 and WWWUSER=1000 in .env to work ⚠️
+{
+	"name": "Existing Docker Compose (Extend)",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "laravel.test",
+	"workspaceFolder": "/var/www/html",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"bmewburn.vscode-intelephense-client",
+				"mehedidracula.php-namespace-resolver",
+				// "amiralizadeh9480.laravel-extra-intellisense",
+				// "ryannaddy.laravel-artisan",
+				// "onecentlin.laravel5-snippets",
+				// "onecentlin.laravel-blade",
+				// "laravel.vscode-laravel",
+				"cweijan.vscode-mysql-client2",
+				"ms-azuretools.vscode-docker"
+			],
+			"settings": {
+				"editor.lightbulb.enabled": "onCode",
+			}
+		}
+	},
+	"remoteUser": "sail",
+	"postCreateCommand": "echo \"alias pa='php artisan'\" >> /home/sail/.bashrc && chown -R 1000:1000 /var/www/html 2>/dev/null || true"
+	// "forwardPorts": [],
+	// "runServices": [],
+	// "shutdownAction": "none",
+}
