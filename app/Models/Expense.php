@@ -18,7 +18,7 @@ class Expense extends Model
         'editable_price'
     ];
 
-    public function exepenseCategory(): BelongsTo
+    public function expenseCategory(): BelongsTo
     {
         return $this->belongsTo(ExpenseCategory::class);
     }
