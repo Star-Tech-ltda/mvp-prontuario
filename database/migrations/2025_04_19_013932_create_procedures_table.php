@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('default_price');
             $table->boolean('editable_price');
+            $table->timestamps();
         });
     }
 

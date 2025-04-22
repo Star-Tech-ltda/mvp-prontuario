@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('cost_type', ["Unity","Use","Service","Percent","Kilometer","Time","Month","Fixed"]);
             $table->text('description');
+            $table->timestamps();
         });
     }
 

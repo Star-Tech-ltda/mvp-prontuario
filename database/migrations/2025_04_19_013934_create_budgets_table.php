@@ -21,6 +21,7 @@ return new class extends Migration
             $table->decimal('cost_price');
             $table->decimal('price_with_profit');
             $table->decimal('sale_price');
+            $table->timestamps();
         });
     }
 
