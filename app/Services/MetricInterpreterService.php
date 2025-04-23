@@ -77,10 +77,6 @@ class MetricInterpreterService
             }
         }
 
-
-
-
-
         //frequencia respiratoria
         if (!empty($data['respiratory_rate']) && !empty($data['age'])) {
             $rr = intval($data['respiratory_rate']);
@@ -105,7 +101,23 @@ class MetricInterpreterService
 
 
         //saturacao
+        if (!empty($data['oxygen_saturation'])) {
+            $oxygenSat = intval($data['oxygen_saturation']);
 
+            if (!CalculatedMetric::where('evolution_id', $evolutionId)
+                ->where('calculated_type', MetricType::OS)
+                ->exists()) {
+
+                $interpretation = self::interpretOS($oxygenSat);
+
+                CalculatedMetric::create([
+                    'evolution_id' => $evolutionId,
+                    'calculated_type' => MetricType::OS,
+                    'result' => $oxygenSat,
+                    'interpretation' => $interpretation,
+                ]);
+            }
+        }
 
 
 
@@ -224,6 +236,17 @@ class MetricInterpreterService
                 default => 'Indeterminado',
             };
         }
+    }
+
+    private static function interpretOS(int $oxygenSat): string
+    {
+        return match (true) {
+            $oxygenSat < 85 => 'Hipoxemia severa',
+            $oxygenSat <= 89 => 'Hipoxemia moderada',
+            $oxygenSat <= 94 => 'Hipoxemia leve',
+            $oxygenSat >= 96 => 'Normal',
+            default => 'Indeterminado',
+        };
     }
 
 }
