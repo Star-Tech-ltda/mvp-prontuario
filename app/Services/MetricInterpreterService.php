@@ -123,7 +123,23 @@ class MetricInterpreterService
 
 
         //temperatura
+        if (!empty($data['temperature'])) {
+            $temp = floatval($data['temperature']);
 
+            if (!CalculatedMetric::where('evolution_id', $evolutionId)
+                ->where('calculated_type', MetricType::TP)
+                ->exists()) {
+
+                $interpretation = self::interpretTP($temp);
+
+                CalculatedMetric::create([
+                    'evolution_id' => $evolutionId,
+                    'calculated_type' => MetricType::TP,
+                    'result' => $temp,
+                    'interpretation' => $interpretation,
+                ]);
+            }
+        }
 
 
     }
@@ -238,6 +254,7 @@ class MetricInterpreterService
         }
     }
 
+    //saturação
     private static function interpretOS(int $oxygenSat): string
     {
         return match (true) {
@@ -245,6 +262,22 @@ class MetricInterpreterService
             $oxygenSat <= 89 => 'Hipoxemia moderada',
             $oxygenSat <= 94 => 'Hipoxemia leve',
             $oxygenSat >= 96 => 'Normal',
+            default => 'Indeterminado',
+        };
+    }
+
+    //temperatura
+    private static function interpretTP(float $temp): string
+    {
+        return match (true) {
+            $temp < 32.0 => 'Hipotermia severa',
+            $temp <= 33.9 => 'Hipotermia moderada',
+            $temp <= 35.9 => 'Hipotermia leve',
+            $temp <= 37.5 => 'Normal',
+            $temp <= 38.5 => 'Estado febril',
+            $temp <= 39.5 => 'Febre moderada',
+            $temp <= 40.9 => 'Febre alta',
+            $temp >= 41.0 => 'Hipertermia/Febre muito alta',
             default => 'Indeterminado',
         };
     }
