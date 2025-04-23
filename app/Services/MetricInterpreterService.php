@@ -58,7 +58,6 @@ class MetricInterpreterService
 
 
         //frequencia cardiaca
-
         if (!empty($data['heart_rate']) && !empty($data['age'])) {
             $hr = intval($data['heart_rate']);
             $age = intval($data['age']);
@@ -83,8 +82,24 @@ class MetricInterpreterService
 
 
         //frequencia respiratoria
+        if (!empty($data['respiratory_rate']) && !empty($data['age'])) {
+            $rr = intval($data['respiratory_rate']);
+            $age = intval($data['age']);
 
+            if (!CalculatedMetric::where('evolution_id', $evolutionId)
+                ->where('calculated_type', MetricType::RR)
+                ->exists()) {
 
+                $interpretation = self::interpretRR($rr, $age);
+
+                CalculatedMetric::create([
+                    'evolution_id' => $evolutionId,
+                    'calculated_type' => MetricType::RR,
+                    'result' => $rr,
+                    'interpretation' => $interpretation,
+                ]);
+            }
+        }
 
 
 
@@ -170,6 +185,42 @@ class MetricInterpreterService
                 $hr <= 120 => 'Taquicardia leve',
                 $hr <= 140 => 'Taquicardia moderada',
                 $hr > 140 => 'Taquicardia severa',
+                default => 'Indeterminado',
+            };
+        }
+    }
+
+    // frequencia respiratoria
+    private static function interpretRR(int $rr, int $age): string
+    {
+        if ($age < 1) { // metricas para bebês
+            return match (true) {
+                $rr < 20 => 'Bradipneia severa',
+                $rr <= 29 => 'Bradipneia',
+                $rr <= 60 => 'Normal',
+                $rr <= 70 => 'Taquipneia leve',
+                $rr <= 80 => 'Taquipneia moderada',
+                $rr > 80 => 'Taquipneia severa',
+                default => 'Indeterminado',
+            };
+        } elseif ($age <= 12) { // metricas para crianças
+            return match (true) {
+                $rr < 15 => 'Bradipneia severa',
+                $rr <= 19 => 'Bradipneia',
+                $rr <= 30 => 'Normal',
+                $rr <= 35 => 'Taquipneia leve',
+                $rr <= 50 => 'Taquipneia moderada',
+                $rr > 50 => 'Taquipneia severa',
+                default => 'Indeterminado',
+            };
+        } else { // metricas para adulto
+            return match (true) {
+                $rr < 8 => 'Bradipneia severa',
+                $rr <= 11 => 'Bradipneia',
+                $rr <= 20 => 'Normal',
+                $rr <= 24 => 'Taquipneia leve',
+                $rr <= 30 => 'Taquipneia moderada',
+                $rr > 30 => 'Taquipneia severa',
                 default => 'Indeterminado',
             };
         }
