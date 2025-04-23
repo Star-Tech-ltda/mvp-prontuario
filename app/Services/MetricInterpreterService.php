@@ -67,7 +67,7 @@ class MetricInterpreterService
                 ->where('calculated_type', MetricType::HR)
                 ->exists()) {
 
-                $interpretation = self::interpretBP($hr, $age);
+                $interpretation = self::interpretHR($hr, $age);
 
                 CalculatedMetric::create([
                     'evolution_id' => $evolutionId,
