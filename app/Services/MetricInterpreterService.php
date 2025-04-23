@@ -59,7 +59,24 @@ class MetricInterpreterService
 
         //frequencia cardiaca
 
+        if (!empty($data['heart_rate']) && !empty($data['age'])) {
+            $hr = intval($data['heart_rate']);
+            $age = intval($data['age']);
 
+            if (!CalculatedMetric::where('evolution_id', $evolutionId)
+                ->where('calculated_type', MetricType::HR)
+                ->exists()) {
+
+                $interpretation = self::interpretBP($hr, $age);
+
+                CalculatedMetric::create([
+                    'evolution_id' => $evolutionId,
+                    'calculated_type' => MetricType::HR,
+                    'result' => $hr,
+                    'interpretation' => $interpretation,
+                ]);
+            }
+        }
 
 
 
@@ -121,4 +138,41 @@ class MetricInterpreterService
             default => 'Indeterminado',
         };
     }
+
+    //frequencia cardiaca
+    private static function interpretHR(int $hr, int $age): string
+    {
+        if ($age < 1) { // metricas para bebês
+            return match (true) {
+                $hr < 70 => 'Bradicardia severa',
+                $hr < 90 => 'Bradicardia',
+                $hr <= 160 => 'Frequência normal',
+                $hr <= 180 => 'Taquicardia leve',
+                $hr <= 200 => 'Taquicardia moderada',
+                $hr > 200 => 'Taquicardia severa',
+                default => 'Indeterminado',
+            };
+        } elseif ($age <= 10) { // metricas para crianças
+            return match (true) {
+                $hr < 60 => 'Bradicardia severa',
+                $hr < 70 => 'Bradicardia',
+                $hr <= 120 => 'Frequência normal',
+                $hr <= 150 => 'Taquicardia leve',
+                $hr <= 180 => 'Taquicardia moderada',
+                $hr > 180 => 'Taquicardia severa',
+                default => 'Indeterminado',
+            };
+        } else { // metricas para adulto
+            return match (true) {
+                $hr < 40 => 'Bradicardia severa',
+                $hr < 60 => 'Bradicardia',
+                $hr <= 100 => 'Frequência normal',
+                $hr <= 120 => 'Taquicardia leve',
+                $hr <= 140 => 'Taquicardia moderada',
+                $hr > 140 => 'Taquicardia severa',
+                default => 'Indeterminado',
+            };
+        }
+    }
+
 }
