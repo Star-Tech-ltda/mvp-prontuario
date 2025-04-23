@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\EvolutionResource\Pages;
 
 use App\Filament\Resources\EvolutionResource;
+use App\Models\BiometricData;
 use App\Services\MetricInterpreterService;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
@@ -29,6 +30,11 @@ class CreateEvolution extends CreateRecord
 
         $record->assessmentOptions()->sync($selectedOptionIds);
 
-        MetricInterpreterService::handle($state, $record->id);
+        if ($record->biometricData()->exists()) {
+            MetricInterpreterService::handle(
+                $record->biometricData->toArray(),
+                $record->id
+            );
+        }
     }
 }

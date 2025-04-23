@@ -8,6 +8,7 @@ use App\Models\AssessmentGroup;
 use App\Models\AssessmentOption;
 use App\Models\Evolution;
 use App\Models\Patient;
+use App\Services\MetricInterpreterService;
 use Carbon\Carbon;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Grid;
@@ -235,6 +236,17 @@ class EvolutionResource extends Resource
             'index' => Pages\ListEvolutions::route('/'),
             'create' => Pages\CreateEvolution::route('/create'),
             'edit' => Pages\EditEvolution::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getActions(): array
+    {
+        return [
+            Actions\CreateAction::make()
+                ->after(function (Evolution $record, array $data) {
+                    // Chamar seu service aqui
+                    MetricInterpreterService::handle($data, $record->id);
+                }),
         ];
     }
 }

@@ -11,20 +11,17 @@ class MetricInterpreterService
     public static function handle(array $data, int $evolutionId): void
     {
 
+        /// imc
         if (!empty($data['weight']) && !empty($data['height'])) {
             $height = floatval($data['height']);
             $weight = floatval($data['weight']);
-
-            if ( $height > 3) {
-                $height = $height / 100;
-            }
 
             if (CalculatedMetric::where('evolution_id', $evolutionId)
                 ->where('calculated_type', MetricType::BMI)
                 ->exists()) {
                 return;
             }
-            $bmi = $weight / ($height * $height);
+            $bmi = self::calculateBMI($data['weight'], $data['height']);
             $interpretation = self::interpretBMI($bmi);
 
             CalculatedMetric::create([
@@ -34,9 +31,53 @@ class MetricInterpreterService
                 'interpretation' => $interpretation,
             ]);
 
-
         }
 
+
+
+        //pressão arterial
+
+
+
+
+
+
+
+
+        //frequencia cardiaca
+
+
+
+
+
+
+
+        //frequencia respiratoria
+
+
+
+
+
+
+        //saturacao
+
+
+
+
+
+        //temperatura
+
+
+
+    }
+
+
+    private static function calculateBMI(float $width, float $height): float
+    {
+        if ($height > 3){
+            $height = $height / 100;
+        }
+        return $width / ($height * $height);
 
     }
 
