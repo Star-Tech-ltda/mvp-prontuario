@@ -58,7 +58,7 @@ class MetricInterpreterService
 
 
         //frequencia cardiaca
-        if (!empty($data['heart_rate']) && !empty($data['age'])) {
+        if (isset($data['heart_rate']) && is_numeric($data['age'])) {
             $hr = intval($data['heart_rate']);
             $age = intval($data['age']);
 
@@ -78,7 +78,8 @@ class MetricInterpreterService
         }
 
         //frequencia respiratoria
-        if (!empty($data['respiratory_rate']) && !empty($data['age'])) {
+        if (isset($data['respiratory_rate']) && is_numeric($data['age']))
+        {
             $rr = intval($data['respiratory_rate']);
             $age = intval($data['age']);
 
