@@ -62,6 +62,13 @@ class EditEvolution extends EditRecord
             ->all();
 
         $record->assessmentOptions()->sync($selectedOptionIds);
+
+        if ($record->biometricData()->exists()) {
+
+            MetricInterpreterService::handle($record->biometricData->toArray(), $record->id);
+
+        }
+
     }
 
     public function form(Form $form): Form

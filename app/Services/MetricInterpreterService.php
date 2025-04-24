@@ -16,23 +16,15 @@ class MetricInterpreterService
             $height = floatval($data['height']);
             $weight = floatval($data['weight']);
 
-            if (CalculatedMetric::where('evolution_id', $evolutionId)
-                ->where('calculated_type', MetricType::BMI)
-                ->exists()) {
-                return;
-            }
-            $bmi = self::calculateBMI($data['weight'], $data['height']);
+            $bmi = self::calculateBMI($weight, $height);
             $interpretation = self::interpretBMI($bmi);
 
-            CalculatedMetric::create([
-                'evolution_id' => $evolutionId,
-                'calculated_type' => MetricType::BMI,
-                'result' => round($bmi, 2),
-                'interpretation' => $interpretation,
-            ]);
 
+             CalculatedMetric::updateOrCreate(
+                [ 'evolution_id' => $evolutionId, 'calculated_type' => MetricType::BMI ],
+                [ 'result' => round($bmi, 2),  'interpretation' => $interpretation]
+            );
         }
-
 
 
         //pressão arterial
@@ -40,19 +32,13 @@ class MetricInterpreterService
             $systolic = intval($data['systolic_pressure']);
             $diastolic = intval($data['diastolic_pressure']);
 
-            if (!CalculatedMetric::where('evolution_id', $evolutionId)
-                ->where('calculated_type', MetricType::BP)
-                ->exists()) {
-
                 $interpretation = self::interpretBP($systolic, $diastolic);
 
-                CalculatedMetric::create([
-                    'evolution_id' => $evolutionId,
-                    'calculated_type' => MetricType::BP,
-                    'result' => "{$systolic}/{$diastolic}",
-                    'interpretation' => $interpretation,
-                ]);
-            }
+                CalculatedMetric::updateOrCreate(
+                    [ 'evolution_id' => $evolutionId,'calculated_type' => MetricType::BP ],
+                    [ 'result' => "{$systolic}/{$diastolic}",'interpretation' => $interpretation ]
+                );
+
         }
 
 
@@ -62,19 +48,13 @@ class MetricInterpreterService
             $hr = intval($data['heart_rate']);
             $age = intval($data['age']);
 
-            if (!CalculatedMetric::where('evolution_id', $evolutionId)
-                ->where('calculated_type', MetricType::HR)
-                ->exists()) {
-
                 $interpretation = self::interpretHR($hr, $age);
 
-                CalculatedMetric::create([
-                    'evolution_id' => $evolutionId,
-                    'calculated_type' => MetricType::HR,
-                    'result' => $hr,
-                    'interpretation' => $interpretation,
-                ]);
-            }
+                CalculatedMetric::updateOrCreate(
+                    [ 'evolution_id' => $evolutionId,'calculated_type' => MetricType::HR],
+                    [ 'result' => $hr, 'interpretation' => $interpretation ]
+                );
+
         }
 
         //frequencia respiratoria
@@ -83,21 +63,14 @@ class MetricInterpreterService
             $rr = intval($data['respiratory_rate']);
             $age = intval($data['age']);
 
-            if (!CalculatedMetric::where('evolution_id', $evolutionId)
-                ->where('calculated_type', MetricType::RR)
-                ->exists()) {
-
                 $interpretation = self::interpretRR($rr, $age);
 
-                CalculatedMetric::create([
-                    'evolution_id' => $evolutionId,
-                    'calculated_type' => MetricType::RR,
-                    'result' => $rr,
-                    'interpretation' => $interpretation,
-                ]);
-            }
-        }
+                CalculatedMetric::updateOrCreate(
+                    [ 'evolution_id' => $evolutionId,'calculated_type' => MetricType::RR],
+                    [ 'result' => $rr,'interpretation' => $interpretation ]
+                );
 
+        }
 
 
 
@@ -105,41 +78,27 @@ class MetricInterpreterService
         if (!empty($data['oxygen_saturation'])) {
             $oxygenSat = intval($data['oxygen_saturation']);
 
-            if (!CalculatedMetric::where('evolution_id', $evolutionId)
-                ->where('calculated_type', MetricType::OS)
-                ->exists()) {
-
                 $interpretation = self::interpretOS($oxygenSat);
 
-                CalculatedMetric::create([
-                    'evolution_id' => $evolutionId,
-                    'calculated_type' => MetricType::OS,
-                    'result' => $oxygenSat,
-                    'interpretation' => $interpretation,
-                ]);
-            }
+                CalculatedMetric::updateOrCreate(
+                    ['evolution_id' => $evolutionId, 'calculated_type' => MetricType::OS ],
+                    [ 'result' => $oxygenSat, 'interpretation' => $interpretation]
+                );
+
         }
-
-
 
 
         //temperatura
         if (!empty($data['temperature'])) {
             $temp = floatval($data['temperature']);
 
-            if (!CalculatedMetric::where('evolution_id', $evolutionId)
-                ->where('calculated_type', MetricType::TP)
-                ->exists()) {
-
                 $interpretation = self::interpretTP($temp);
 
-                CalculatedMetric::create([
-                    'evolution_id' => $evolutionId,
-                    'calculated_type' => MetricType::TP,
-                    'result' => $temp,
-                    'interpretation' => $interpretation,
-                ]);
-            }
+                CalculatedMetric::updateOrCreate(
+                    ['evolution_id' => $evolutionId,'calculated_type' => MetricType::TP],
+                    ['result' => $temp, 'interpretation' => $interpretation ]
+                );
+
         }
 
 
