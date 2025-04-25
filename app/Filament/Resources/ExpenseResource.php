@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\ExpenseCluster;
 use App\Filament\Resources\ExpenseResource\Pages;
 use App\Filament\Resources\ExpenseResource\RelationManagers;
 use App\Models\Expense;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,7 +19,19 @@ class ExpenseResource extends Resource
 {
     protected static ?string $model = Expense::class;
 
+    protected static ?string $cluster = ExpenseCluster::class;
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationLabel = 'Despesas';
+
+    public static function getModelLabel(): string
+    {
+        return 'Despesa';
+    }
+
+
 
     public static function form(Form $form): Form
     {
@@ -25,16 +39,21 @@ class ExpenseResource extends Resource
             ->schema([
                 Forms\Components\Select::make('expense_category_id')
                     ->relationship('expenseCategory', 'name')
+                    ->label('Qual a categoria desta Despesa?')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->label('Nome')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('default_price')
+                    ->label('Valor Padrão')
                     ->required()
                     ->numeric()
                     ->minValue(0)
                     ->step(0.01),
-                Forms\Components\Toggle::make('editable_price'),
+                Forms\Components\Toggle::make('editable_price')
+                    ->label('Valor Editável')
+                ,
             ]);
     }
 
