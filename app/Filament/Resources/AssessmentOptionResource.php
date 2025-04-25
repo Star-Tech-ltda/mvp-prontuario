@@ -3,32 +3,35 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Severity;
-use App\Filament\Resources\AssessmentGroupResource\RelationManagers\AssessmentOptionsRelationManager;
+use App\Filament\Clusters\EvaluationsCluster;
 use App\Filament\Resources\AssessmentOptionResource\Pages;
 use App\Filament\Resources\AssessmentOptionResource\RelationManagers;
 use App\Models\AssessmentGroup;
 use App\Models\AssessmentOption;
-use Filament\Forms;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 
 class AssessmentOptionResource extends Resource
 {
     protected static ?string $model = AssessmentOption::class;
 
-    protected static ?string $navigationGroup = 'Administração';
+    protected static ?string $cluster = EvaluationsCluster::class;
+
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
+
+
+    protected static ?string $navigationIcon = 'radix-dot-filled';
+
 
     public static function getModelLabel(): string
     {

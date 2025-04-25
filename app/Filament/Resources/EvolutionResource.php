@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\Evolutions;
+use App\Filament\Clusters\ManagerPatients;
+use App\Filament\Clusters\Patients;
 use App\Filament\Resources\EvolutionResource\Pages;
 use App\Filament\Resources\EvolutionResource\RelationManagers;
 use App\Models\AssessmentGroup;
@@ -21,6 +24,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -31,10 +35,11 @@ class EvolutionResource extends Resource
     protected static ?string $model = Evolution::class;
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Enfermagem';
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
     protected static ?string $navigationLabel = 'Evoluções';
 
+    protected static ?string $cluster = ManagerPatients::class;
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {

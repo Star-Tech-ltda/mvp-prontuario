@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Clusters\EvaluationsCluster;
 use App\Filament\Resources\AssessmentGroupResource\Pages;
 use App\Filament\Resources\AssessmentGroupResource\RelationManagers;
 use App\Filament\Resources\AssessmentGroupResource\RelationManagers\AssessmentOptionsRelationManager;
@@ -13,6 +14,7 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -24,11 +26,16 @@ use Illuminate\Support\Str;
 class AssessmentGroupResource extends Resource
 {
     protected static ?string $model = AssessmentGroup::class;
-
     protected static ?string $pluralLabel = 'Grupos para avaliação';
+
     protected static ?string $label = 'Grupo';
-    protected static ?string $navigationGroup = 'Administração';
-protected static ?string $navigationIcon = 'fluentui-form-multiple-48-o';
+
+    protected static ?string $navigationIcon = 'fluentui-form-multiple-48-o';
+
+    protected static ?string $cluster = EvaluationsCluster::class;
+
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
+
     public static function form(Form $form): Form
     {
         return $form

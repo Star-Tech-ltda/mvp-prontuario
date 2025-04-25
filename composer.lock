@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "645f3ea4f6d3eb780f835194181f378c",
+    "content-hash": "009f6ff93f93d4a4af72c282493b8089",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -422,6 +422,77 @@
                 }
             ],
             "time": "2025-02-25T07:30:15+00:00"
+        },
+        {
+            "name": "codeat3/blade-radix-icons",
+            "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codeat3/blade-radix-icons.git",
+                "reference": "9efd53fe7dd955704e26d026d87cd32e7798264b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codeat3/blade-radix-icons/zipball/9efd53fe7dd955704e26d026d87cd32e7798264b",
+                "reference": "9efd53fe7dd955704e26d026d87cd32e7798264b",
+                "shasum": ""
+            },
+            "require": {
+                "blade-ui-kit/blade-icons": "^1.1",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^7.4|^8.0"
+            },
+            "require-dev": {
+                "codeat3/blade-icon-generation-helpers": "^0.10",
+                "codeat3/phpcs-styles": "^1.0",
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.0|^10.5|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Codeat3\\BladeRadixIcons\\BladeRadixIconsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Codeat3\\BladeRadixIcons\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Swapnil Sarwe",
+                    "homepage": "https://swapnilsarwe.com"
+                },
+                {
+                    "name": "Dries Vints",
+                    "homepage": "https://driesvints.com"
+                }
+            ],
+            "description": "A package to easily make use of \"Radix Icons\" in your Laravel Blade views.",
+            "homepage": "https://github.com/codeat3/blade-radix-icons",
+            "keywords": [
+                "blade",
+                "laravel",
+                "radix-icons"
+            ],
+            "support": {
+                "issues": "https://github.com/codeat3/blade-radix-icons/issues",
+                "source": "https://github.com/codeat3/blade-radix-icons/tree/1.8.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/swapnilsarwe",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-26T08:56:57+00:00"
         },
         {
             "name": "codeat3/blade-vaadin-icons",

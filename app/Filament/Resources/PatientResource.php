@@ -4,6 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Enums\MaritalStatus;
 use App\Enums\Sex;
+use App\Filament\Clusters\Evolutions;
+use App\Filament\Clusters\ManagerPatients;
+use App\Filament\Clusters\Patients;
 use App\Filament\Resources\PatientResource\Pages;
 use App\Filament\Resources\PatientResource\RelationManagers;
 use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationManager;
@@ -18,6 +21,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Form;
+use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\RawJs;
@@ -38,13 +42,18 @@ use Illuminate\Support\Facades\Log;
 class PatientResource extends Resource
 {
     protected static ?string $model = Patient::class;
-    protected static ?string $navigationGroup = 'Enfermagem';
+
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?int $navigationSort = 1;
-    public static function getModelLabel(): string
-    {
-        return 'Paciente';
-    }
+
+
+    protected static ?string $cluster = ManagerPatients::class;
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
+
+
+//    public static function getModelLabel(): string
+//    {
+//        return 'Paciente';
+//    }
 
     public static function getPluralModelLabel(): string
     {
