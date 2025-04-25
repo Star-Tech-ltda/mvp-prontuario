@@ -50,10 +50,10 @@ class PatientResource extends Resource
     protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
 
-//    public static function getModelLabel(): string
-//    {
-//        return 'Paciente';
-//    }
+    public static function getModelLabel(): string
+    {
+        return 'Paciente';
+    }
 
     public static function getPluralModelLabel(): string
     {
