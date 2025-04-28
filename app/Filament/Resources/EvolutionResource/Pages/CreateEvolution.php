@@ -36,5 +36,12 @@ class CreateEvolution extends CreateRecord
                 $record->id
             );
         }
+
+        $record->load('assessmentOptions');
+
+        $this->record->updateQuietly([
+            'evolution_text' => $this->record->generateEvolutionText(),
+        ]);
+
     }
 }
