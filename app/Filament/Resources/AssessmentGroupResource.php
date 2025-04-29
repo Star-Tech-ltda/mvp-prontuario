@@ -77,7 +77,7 @@ class AssessmentGroupResource extends Resource
                                 ->label('')
                                 ->content(new HtmlString(
                                     '<p class="text-sm text-gray-500">Você pode cadastrar opções para esse grupo e outros em
-                                            <a href="' . route('filament.admin.resources.assessment-options.index') . '"
+                                            <a href="' . route('filament.admin.evaluations.resources.assessment-options.index') . '"
                                                class="text-primary-600 hover:underline inline-flex items-center gap-1">
                                                 OPÇÕES POR GRUPO
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
