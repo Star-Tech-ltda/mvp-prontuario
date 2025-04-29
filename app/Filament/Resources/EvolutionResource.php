@@ -82,10 +82,6 @@ class EvolutionResource extends Resource
                                                        ->label('Idade')
                                                        ->numeric()
                                                        ->readOnly(),
-                                                   Placeholder::make('motivo_internacao')
-                                                       ->label('Motivo da Internação')
-                                                       ->content(fn ($get, $livewire) => $livewire->data['temp_internment_reason'] ?? '---')
-                                                       ->reactive(),
 
                                                    Placeholder::make('diagnostico')
                                                        ->label('Diagnóstico')
@@ -192,7 +188,7 @@ class EvolutionResource extends Resource
                             ]),
                     ])->columnSpan('full')
 
-            ])  ;
+            ]) ;
     }
 
 
