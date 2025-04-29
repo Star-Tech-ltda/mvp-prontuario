@@ -97,49 +97,40 @@ class PatientResource extends Resource
                             ->label('Idade')
                             ->content(fn ($get) => PatientResource::calculateAge($get('birth_date')))                        ,
 
-                        TextInput::make('cpf')
-                            ->label('CPF')
-                            ->mask(RawJs::make("'999.999.999-99'"))
-                            ->maxLength(14)
-                            ->columnSpan(1),
 
                         Select::make('sex')
                             ->options(collect(Sex::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
-                            ->label('Sexo'),
-
-                        Select::make('marital_status')
-                            ->nullable()
-                            ->options(collect(MaritalStatus::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
-                            ->label('Estado Civil'),
+                            ->label('Sexo do Paciente'),
 
 
+                        Select::make('responsible')
+                            ->label('Acompanhado por :')
+                            ->options([
+                                'Esposo','Esposa','Familiar','Cuidador', 'Filho','Filha',
+                            ]),
 
-                        TextInput::make('responsible')
-                            ->label('Responsável'),
-
-                        TextInput::make('phone')
-                            ->label('Telefone')
-                            ->mask(RawJs::make("'(99) 9999-9999'"))
-                            ->tel()
-                            ->maxLength(20),
-
-                        TextInput::make('address')
-                            ->label('Endereço')
-                            ->maxLength(255),
-
+                        Select::make('movement')
+                            ->label('Deambulação/Movimentação')
+                            ->options([
+                               ' Deambulando sem auxílio',
+                                'Deambulando com auxílio',
+                                'Sem deambular',
+                                'Acamado',
+                                'Em cadeira de rodas',
+                                'Restrito ao leito',
+                                'Repousando no leito',
+                                'Ativo',
+                                'Hiperativo',
+                                'Hipoativo',
+                            ]),
 
                 ])->columns(3),
                 Section::make('Informações de internação ')
                     ->schema([
-                        TextInput::make('internment_reason')
-                            ->label('Motivo da Internação')
-                            ->maxLength(255)
-                        ->columnSpan(2),
-
 
 
                         DatePicker::make('internment_date')
-                            ->label('Data da Internação')
+                            ->label('Dia de internação Hospitalar')
                             ->native(false)
                             ->reactive()
                             ->displayFormat('d/m/Y')
@@ -150,23 +141,16 @@ class PatientResource extends Resource
                                 ->action(fn ($set) => $set('internment_date', now()->toDateString()))
                             ),
 
+                        TextInput::make('complaints')
+                            ->label('Queixa principal')
+                            ->maxLength(255)
+                            ,
 
-
-                        TimePicker::make('internment_time')
-                            ->label('Hora da Internação')
-                            ->reactive()
-                            ->suffixAction(
-                                Action::make('hora-atual')
-                                    ->icon('mdi-clock-star-four-points-outline')
-                                    ->action(function ($set) {
-                                        $time = now()->format('H:i:s');
-                                        $set('internment_time', $time);
-                                    })
-                            ),
-
-
-
-
+                        TextInput::make('internment_reason')
+                            ->label('Proveniente de ')
+                            ->maxLength(255)
+                         ->columnSpan(2)
+                            ,
 
 
                         TextInput::make('internment_location')
@@ -178,9 +162,9 @@ class PatientResource extends Resource
                             ->maxLength(255),
 
                         TextInput::make('diagnosis')
-                            ->label('Diagnostico')
+                            ->label('Diagnóstico Médico - HDM')
                             ->maxLength(255)
-                            ->columnSpan(2),
+                           ->columnSpan(2) ,
                     ])->columns(4),
 
             ]) ;
