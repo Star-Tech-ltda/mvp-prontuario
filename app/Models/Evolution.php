@@ -50,10 +50,7 @@ class Evolution extends Model
             'assessment_option_id'
         );
     }
-    public function text(): HasOne
-    {
-        return $this->hasOne(EvolutionText::class);
-    }
+
     protected static function booted(): void
     {
         static::saving(static function (Evolution $evolution) {
@@ -63,35 +60,48 @@ class Evolution extends Model
 
     public function generateEvolutionText(): string
     {
-        $this->loadMissing('assessmentOptions.assessmentGroup');
 
-        $evoText = '';
 
-        $templates = [
-            'abdome' => 'O abdome apresenta-se :option.',
-            'boca' => 'Observa-se na boca: :option.',
-            'cranio' => 'O crânio mostra-se :option.',
-            'olhos' => 'Nos olhos, nota-se: :option.',
-            'ouvidos' => 'Nos ouvidos, evidencia-se: :option.',
-        ];
+        $this->loadMissing([
+            'assessmentOptions.assessmentGroup',
+            'patient',
+        ]);
 
-        $groups = AssessmentGroup::with('assessmentOptions')->get();
+        $biometricData = \DB::table('biometric_data')
+            ->where('evolution_id', $this->id)
+            ->first();
 
-        foreach ($groups as $group) {
-            $selectedOption = $this->assessmentOptions
-                ->filter(function ($option) use ($group) {
-                    return $option->assessmentGroup && $option->assessmentGroup->id === $group->id;
-                })
-                ->first();
 
-            if ($selectedOption) {
-                $template = $templates[$group->slug] ?? 'O estado de ' . $group->name . ' é :option.';
-                $evoText .= str_replace(':option', $selectedOption->description, $template) . ' ';
-            }
+        $dados = [];
+
+        foreach ($this->assessmentOptions as $option) {
+            $dados['{' . $option->assessmentGroup->slug . '}'] = $option->description;
         }
 
-        return trim($evoText);
+            $patientMap=[
+                '{name}' => $this->patient->name,
+                '{sex}' => $this->patient->sex?->value ?? 'Não Informado',
+                '{age}' => $biometricData?->age ?? 'Não Informado',
+                '{responsible}' => $this->patient->responsible ?? 'Não Informado',
+                '{movement}' => $this->patient->movement ?? 'Não Informado',
+                '{complaints}' => $this->patient->complaints ?? 'Não Informado',
+                '{diagnosis}' => $this->patient->diagnosis ?? 'Não Informado',
+                '{internment-reason}' => $this->patient->internment_reason ?? 'Não Informado',
+            ] ;
+
+
+        $dados = array_merge($dados, $patientMap);
+
+
+        $template = "Cliente {name}, {age} anos, {sex}, admitida neste setor por HD : {diagnosis}, proveniente de {internment_reason}, {movement} e acompanhado por {responsible}.
+                Segue em {estado-geral}, {consciencia}, {orientacao}, {comunicação}, {humorestado-emocional}, {hidratação}, {estado-nutricional}, {pele}, {higiene corporal}.
+                .";
+
+
+
+        return strtr($template, $dados);
     }
+
 
 
 }

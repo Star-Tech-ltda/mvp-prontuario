@@ -62,7 +62,9 @@ class PatientResource extends Resource
 
     public static function calculateAge(?string $date): string
     {
-        if (! $date) return '-';
+        if (! $date) {
+            return '-';
+        }
 
         return \Carbon\Carbon::parse($date)
             ->diff(now())
@@ -105,30 +107,35 @@ class PatientResource extends Resource
 
                         Select::make('responsible')
                             ->label('Acompanhado por :')
+                            ->native(false)
                             ->options([
-                                'Esposo','Esposa','Familiar','Cuidador', 'Filho','Filha',
+                                'Esposo'=>'Esposo',
+                                'Esposa'=>'Esposa',
+                                'Familiar'=>'Familiar',
+                                'Cuidador'=>'Cuidador',
+                                'Filho'=>'Filho',
+                                'Filha'=>'Filha',
                             ]),
 
                         Select::make('movement')
                             ->label('Deambulação/Movimentação')
+                            ->native(false)
                             ->options([
-                               ' Deambulando sem auxílio',
-                                'Deambulando com auxílio',
-                                'Sem deambular',
-                                'Acamado',
-                                'Em cadeira de rodas',
-                                'Restrito ao leito',
-                                'Repousando no leito',
-                                'Ativo',
-                                'Hiperativo',
-                                'Hipoativo',
+                                'Deambulando sem auxílio'=> ' Deambulando sem auxílio',
+                                'Deambulando com auxílio'=>'Deambulando com auxílio',
+                                'Sem deambular'=>'Sem deambular',
+                                'Acamado'=>'Acamado',
+                                'Em cadeira de rodas'=>'Em cadeira de rodas',
+                                'Restrito ao leito'=>'Restrito ao leito',
+                                'Repousando no leito'=>'Repousando no leito',
+                                'Ativo'=>'Ativo',
+                                'Hiperativo'=>'Hiperativo',
+                                'Hipoativo'=>'Hipoativo',
                             ]),
 
                 ])->columns(3),
                 Section::make('Informações de internação ')
                     ->schema([
-
-
                         DatePicker::make('internment_date')
                             ->label('Dia de internação Hospitalar')
                             ->native(false)
@@ -149,7 +156,7 @@ class PatientResource extends Resource
                         TextInput::make('internment_reason')
                             ->label('Proveniente de ')
                             ->maxLength(255)
-                         ->columnSpan(2)
+                            ->columnSpan(2)
                             ,
 
 

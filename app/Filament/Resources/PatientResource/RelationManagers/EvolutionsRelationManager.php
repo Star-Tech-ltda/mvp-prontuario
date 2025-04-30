@@ -85,7 +85,7 @@ class EvolutionsRelationManager extends RelationManager
 
                                                 Placeholder::make('diagnostico')
                                                     ->label('Diagnóstico')
-                                                    ->content(fn ($get, $livewire) => $livewire->data['temp_diagnosis'] ?? 'Ainda não possui diagnóstico')
+                                                    ->content(fn ($get, $livewire) => $livewire->data['temp_diagnosis'] ?? 'Não possui HDM')
                                                     ->reactive(),
                                             ]),
                                         ]),
