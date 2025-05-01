@@ -4,9 +4,9 @@ namespace App\Filament\Resources\ExpenseCategoryResource\Pages;
 
 use App\Filament\Resources\ExpenseCategoryResource;
 use Filament\Actions;
-use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class CreateExpenseCategory extends CreateRecord
+class ViewExpenseCategory extends ViewRecord
 {
     protected static string $resource = ExpenseCategoryResource::class;
 }

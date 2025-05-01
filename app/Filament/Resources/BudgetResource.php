@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Forms\Components\TextInput;
 use Filament\Tables;
 use App\Models\Budget;
 use App\Models\Expense;
@@ -18,10 +19,14 @@ use App\Filament\Resources\BudgetResource\Pages;
 class BudgetResource extends Resource
 {
     protected static ?string $model = Budget::class;
-    
+
     protected static ?string $navigationLabel = 'Orçamentos';
 
     protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
+
+    protected static ?int $navigationSort = 5;
+
+    protected static ?string $navigationGroup = 'Financeiro';
 
     public static function form(Form $form): Form
     {
@@ -46,6 +51,7 @@ class BudgetResource extends Resource
                     Step::make('Ajustes Financeiros')
                         ->description('Informe as despesas e outras variáveis financeiras')
                         ->schema([
+                            TextInput::make('profit_margin'),
                             categoryItensRepeater(
                                 categoryField: 'expense_category',
                                 categoryLabel: 'Categoria da Despesa',

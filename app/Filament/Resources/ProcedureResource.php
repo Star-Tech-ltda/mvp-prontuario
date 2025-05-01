@@ -12,28 +12,25 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProcedureResource extends Resource
 {
     protected static ?string $model = Procedure::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $cluster = ProcedureCluster::class;
 
-    protected static ?string $navigationLabel = 'Procedimentos';
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
-    protected static ?string $pluralLabel = 'Procedimentos';
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationLabel = 'Tipos de Procedimento';
+
+    protected static ?int $navigationSort = 2;
 
     public static function getModelLabel(): string
     {
-        return 'Procedimento';
+        return 'Tipo de Procedimento';
     }
-
-    protected static ?string $cluster = ProcedureCluster::class;
-    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
     public static function form(Form $form): Form
     {
@@ -103,9 +100,7 @@ class ProcedureResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProcedures::route('/'),
-            'create' => Pages\CreateProcedure::route('/create'),
-            'edit' => Pages\EditProcedure::route('/{record}/edit'),
+            'index' => Pages\ManageProcedure::route('/'),
         ];
     }
 }

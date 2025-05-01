@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\CostType;
 use App\Filament\Clusters\ProcedureCluster;
 use App\Filament\Resources\ProcedureCategoryResource\Pages;
 use App\Filament\Resources\ProcedureCategoryResource\RelationManagers;
@@ -12,29 +13,26 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProcedureCategoryResource extends Resource
 {
     protected static ?string $model = ProcedureCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $cluster = ProcedureCluster::class;
 
-    protected static ?string $navigationLabel = 'Categoria de Procedimento';
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
-    protected static ?string $pluralLabel = 'Categorias de Procedimentos';
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Categorias';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getModelLabel(): string
     {
         return 'Categoria';
     }
 
-
-    protected static ?string $cluster = ProcedureCluster::class;
-    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
     public static function form(Form $form): Form
     {
         return $form
@@ -43,8 +41,9 @@ class ProcedureCategoryResource extends Resource
                     ->required()
                     ->label('Nome')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('cost_type')
+                Forms\Components\Select::make('cost_type')
                     ->label('Tipo de custo')
+                    ->options(collect(CostType::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
                     ->required(),
                 Forms\Components\Textarea::make('description')
                     ->required()
@@ -92,9 +91,8 @@ class ProcedureCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProcedureCategories::route('/'),
-            'create' => Pages\CreateProcedureCategory::route('/create'),
-            'edit' => Pages\EditProcedureCategory::route('/{record}/edit'),
+            'index' => Pages\ManageProcedureCategory::route('/'),
+            'view' => Pages\ViewProcedureCategory::route('/{record}'),
         ];
     }
 }

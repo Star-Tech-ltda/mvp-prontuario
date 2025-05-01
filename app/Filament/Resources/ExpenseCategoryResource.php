@@ -14,21 +14,20 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ExpenseCategoryResource extends Resource
 {
     protected static ?string $model = ExpenseCategory::class;
 
     protected static ?string $cluster = ExpenseCluster::class;
+
     protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 2;
-    protected static ?string $navigationLabel = 'Categoria de Despesas';
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static ?string $pluralLabel = 'Categorias de Despesas';
+    protected static ?string $navigationLabel = 'Categorias';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getModelLabel(): string
     {
@@ -44,8 +43,9 @@ class ExpenseCategoryResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Select::make('cost_type')
+                    ->label('Tipo de Custo')
                     ->options(collect(CostType::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
-                    ->label('Tipo de Custo'),
+                    ->required(),
                 Forms\Components\Textarea::make('description')
                     ->label('Descrição')
                     ->required()
@@ -92,9 +92,8 @@ class ExpenseCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExpenseCategories::route('/'),
-            'create' => Pages\CreateExpenseCategory::route('/create'),
-            'edit' => Pages\EditExpenseCategory::route('/{record}/edit'),
+            'index' => Pages\ManageExpenseCategory::route('/'),
+            'view' => Pages\ViewExpenseCategory::route('/{record}'),
         ];
     }
 }

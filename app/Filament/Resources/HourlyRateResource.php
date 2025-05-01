@@ -2,21 +2,28 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TimeContextResource\Pages;
-use App\Models\TimeContext;
+use App\Filament\Resources\HourlyRateResource\Pages;
+use App\Models\HourlyRate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class TimeContextResource extends Resource
+class HourlyRateResource extends Resource
 {
-    protected static ?string $model = TimeContext::class;
+    protected static ?string $model = HourlyRate::class;
 
-    protected static ?string $navigationLabel = 'Contextos de Horário';
+    protected static ?string $navigationLabel = 'Tarifa Horária';
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
+
+    protected static ?string $navigationGroup = 'Administração';
+
+    public static function getModelLabel(): string
+    {
+        return 'Tarifa Horária';
+    }
 
     public static function form(Form $form): Form
     {
@@ -64,9 +71,7 @@ class TimeContextResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTimeContexts::route('/'),
-            'create' => Pages\CreateTimeContext::route('/create'),
-            'edit' => Pages\EditTimeContext::route('/{record}/edit'),
+            'index' => Pages\ManageHourlyRate::route('/'),
         ];
     }
 }

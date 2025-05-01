@@ -4,16 +4,17 @@ namespace App\Filament\Resources\PaymentMethodResource\Pages;
 
 use App\Filament\Resources\PaymentMethodResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListPaymentMethods extends ListRecords
+class ManagePaymentMethod extends ManageRecords
 {
     protected static string $resource = PaymentMethodResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make()->slideOver('left'),
         ];
     }
 }

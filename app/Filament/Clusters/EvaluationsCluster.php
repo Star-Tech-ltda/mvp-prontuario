@@ -11,6 +11,4 @@ class EvaluationsCluster extends Cluster
     protected static ?string $navigationLabel = 'Avaliações';
 
     protected static ?string $navigationGroup = 'Administração';
-
-
 }

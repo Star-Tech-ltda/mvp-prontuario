@@ -34,7 +34,7 @@ class Budget extends Model
 
     public function timeContext(): BelongsTo
     {
-        return $this->belongsTo(TimeContext::class);
+        return $this->belongsTo(HourlyRate::class);
     }
 
     public function budgetExpense(): HasMany

@@ -3,17 +3,17 @@
 namespace App\Filament\Resources\ExpenseCategoryResource\Pages;
 
 use App\Filament\Resources\ExpenseCategoryResource;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListExpenseCategories extends ListRecords
+class ManageExpenseCategory extends ManageRecords
 {
     protected static string $resource = ExpenseCategoryResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make()->slideOver('left'),
         ];
     }
 }

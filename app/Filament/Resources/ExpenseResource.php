@@ -12,26 +12,25 @@ use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ExpenseResource extends Resource
 {
     protected static ?string $model = Expense::class;
 
     protected static ?string $cluster = ExpenseCluster::class;
+
     protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 1;
-    protected static ?string $navigationLabel = 'Despesas';
+    protected static ?string $navigationIcon = 'heroicon-o-list-bullet';
+
+    protected static ?string $navigationLabel = 'Tipos de Despesa';
+
+    protected static ?int $navigationSort = 2;
 
     public static function getModelLabel(): string
     {
-        return 'Despesa';
+        return 'Tipo de Despesa';
     }
-
-
 
     public static function form(Form $form): Form
     {
@@ -103,9 +102,7 @@ class ExpenseResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExpenses::route('/'),
-            'create' => Pages\CreateExpense::route('/create'),
-            'edit' => Pages\EditExpense::route('/{record}/edit'),
+            'index' => Pages\ManageExpense::route('/'),
         ];
     }
 }

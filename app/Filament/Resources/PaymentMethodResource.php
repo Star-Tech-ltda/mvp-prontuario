@@ -21,6 +21,13 @@ class PaymentMethodResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
+    protected static ?string $navigationGroup = 'Administração';
+
+    public static function getModelLabel(): string
+    {
+        return 'Método de Pagamento';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -75,9 +82,7 @@ class PaymentMethodResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPaymentMethods::route('/'),
-            'create' => Pages\CreatePaymentMethod::route('/create'),
-            'edit' => Pages\EditPaymentMethod::route('/{record}/edit'),
+            'index' => Pages\ManagePaymentMethod::route('/'),
         ];
     }
 }

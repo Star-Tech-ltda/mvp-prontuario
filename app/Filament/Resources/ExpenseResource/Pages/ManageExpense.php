@@ -4,16 +4,17 @@ namespace App\Filament\Resources\ExpenseResource\Pages;
 
 use App\Filament\Resources\ExpenseResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListExpenses extends ListRecords
+class ManageExpense extends ManageRecords
 {
     protected static string $resource = ExpenseResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make()->slideOver('left'),
         ];
     }
 }

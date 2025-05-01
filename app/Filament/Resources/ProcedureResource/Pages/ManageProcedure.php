@@ -4,16 +4,17 @@ namespace App\Filament\Resources\ProcedureResource\Pages;
 
 use App\Filament\Resources\ProcedureResource;
 use Filament\Actions;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
 
-class EditProcedure extends EditRecord
+class ManageProcedure extends ManageRecords
 {
     protected static string $resource = ProcedureResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            CreateAction::make()->slideOver('left'),
         ];
     }
 }
