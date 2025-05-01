@@ -18,10 +18,15 @@ use App\Filament\Resources\BudgetResource\Pages;
 class BudgetResource extends Resource
 {
     protected static ?string $model = Budget::class;
-    
+
     protected static ?string $navigationLabel = 'Orçamentos';
 
     protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
+
+    public static function canAccess():bool
+    {
+        return auth()->user()->is_admin;
+    }
 
     public static function form(Form $form): Form
     {

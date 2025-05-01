@@ -35,6 +35,11 @@ class ExpenseCategoryResource extends Resource
         return 'Categoria';
     }
 
+    public static function canAccess():bool
+    {
+        return auth()->user()->is_admin;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

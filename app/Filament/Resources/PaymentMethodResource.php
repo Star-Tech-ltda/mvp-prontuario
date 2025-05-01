@@ -21,6 +21,11 @@ class PaymentMethodResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
+    public static function canAccess():bool
+    {
+        return auth()->user()->is_admin;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

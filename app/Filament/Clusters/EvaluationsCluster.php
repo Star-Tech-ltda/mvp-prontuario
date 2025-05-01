@@ -13,4 +13,9 @@ class EvaluationsCluster extends Cluster
     protected static ?string $navigationGroup = 'Administração';
 
 
+    public static function canAccess():bool
+    {
+        return auth()->user()->is_admin;
+    }
+
 }
