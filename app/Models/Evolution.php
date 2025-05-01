@@ -12,9 +12,17 @@ class Evolution extends Model
 {
     protected $fillable = [
         'patient_id',
+        'created_by',
         'observation',
         'evolution_text'
     ];
+
+
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
     public function patient(): BelongsTo
     {
@@ -53,6 +61,10 @@ class Evolution extends Model
 
     protected static function booted(): void
     {
+        static::saving(function ($model) {
+            $model->created_by = auth()->id();
+        });
+
         static::saving(static function (Evolution $evolution) {
             $evolution->generateEvolutionText();
         });

@@ -36,7 +36,9 @@ use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class PatientResource extends Resource
@@ -71,7 +73,21 @@ class PatientResource extends Resource
             ->format('%y anos e %m meses');
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
 
+        if (!auth()->user()->is_admin) {
+           $query->where('created_by', auth()->id());
+        }
+        return $query;
+    }
+
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['created_by'] = Auth::id();
+        return $data;
+    }
 
     public static function form(Form $form): Form
     {
