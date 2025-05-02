@@ -47,12 +47,7 @@ class User extends Authenticatable
         ];
     }
 
-    protected static function booted(): void
-    {
-        static::saving(function ($model) {
-            $model->created_by = auth()->id();
-        });
-    }
+
     public function patients(): HasMany
     {
         return $this->hasMany(Patient::class, 'created_by');
