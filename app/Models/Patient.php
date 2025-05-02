@@ -30,6 +30,7 @@ class Patient extends Model
       'internment_location',
       'bed',
       'diagnosis',
+      'created_by'
     ];
 
     protected $casts = [
