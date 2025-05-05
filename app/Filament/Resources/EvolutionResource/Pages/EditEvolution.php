@@ -69,6 +69,18 @@ class EditEvolution extends EditRecord
 
         }
 
+        $this->record->load([
+            'assessmentOptions.assessmentGroup',
+            'patient',
+            'biometricData',
+            'calculatedMetrics',
+        ]);
+
+
+        $this->record->updateQuietly([
+            'evolution_text' => $this->record->generateEvolutionText(),
+        ]);
+
     }
 
     public function form(Form $form): Form

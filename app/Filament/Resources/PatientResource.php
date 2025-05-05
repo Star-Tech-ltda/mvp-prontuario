@@ -8,38 +8,28 @@ use App\Filament\Clusters\Evolutions;
 use App\Filament\Clusters\ManagerPatients;
 use App\Filament\Clusters\Patients;
 use App\Filament\Resources\PatientResource\Pages;
-use App\Filament\Resources\PatientResource\RelationManagers;
 use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationManager;
 use App\Models\Patient;
-use Carbon\Carbon;
-use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
-use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Columns\Layout\Panel;
-use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class PatientResource extends Resource
 {
@@ -95,7 +85,7 @@ class PatientResource extends Resource
 
             ->schema([
 
-                Section::make('Indentificacao do Paciente')
+                Section::make('Identificação do Paciente')
                     ->schema([
                         TextInput::make('name')
                             ->label('Nome')

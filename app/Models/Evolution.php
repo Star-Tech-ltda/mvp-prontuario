@@ -61,28 +61,22 @@ class Evolution extends Model
 
     protected static function booted(): void
     {
-        static::saving(function ($model) {
-            $model->created_by = auth()->id();
+        static::saving(function (Evolution $evolution) {
+            $evolution->created_by = auth()->id();
+            $evolution->evolution_text = $evolution->generateEvolutionText();
         });
 
-        static::saving(static function (Evolution $evolution) {
-            $evolution->generateEvolutionText();
-        });
     }
 
-    public function generateEvolutionText(): string
+    public function generateEvolutionText($biometricData = null): string
     {
-
-
         $this->loadMissing([
             'assessmentOptions.assessmentGroup',
             'patient',
+            'biometricData',
         ]);
 
-        $biometricData = \DB::table('biometric_data')
-            ->where('evolution_id', $this->id)
-            ->first();
-
+        $biometricData = $biometricData ?? $this->biometricData;
 
         $dados = [];
 
@@ -90,29 +84,26 @@ class Evolution extends Model
             $dados['{' . $option->assessmentGroup->slug . '}'] = $option->description;
         }
 
-            $patientMap=[
-                '{name}' => $this->patient->name,
-                '{sex}' => $this->patient->sex?->value ?? 'Não Informado',
-                '{age}' => $biometricData?->age ?? 'Não Informado',
-                '{responsible}' => $this->patient->responsible ?? 'Não Informado',
-                '{movement}' => $this->patient->movement ?? 'Não Informado',
-                '{complaints}' => $this->patient->complaints ?? 'Não Informado',
-                '{diagnosis}' => $this->patient->diagnosis ?? 'Não Informado',
-                '{internment-reason}' => $this->patient->internment_reason ?? 'Não Informado',
-            ] ;
-
+        $patientMap = [
+            '{name}' => $this->patient->name,
+            '{sex}' => $this->patient->sex?->value ?? 'Não Informado',
+            '{age}' => $biometricData?->age ?? 'Não Informado',
+            '{responsible}' => $this->patient->responsible ?? 'Não Informado',
+            '{movement}' => $this->patient->movement ?? 'Não Informado',
+            '{complaints}' => $this->patient->complaints ?? 'Não Informado',
+            '{diagnosis}' => $this->patient->diagnosis ?? 'Não Informado',
+            '{internment_reason}' => $this->patient->internment_reason ?? 'Não Informado',
+        ];
 
         $dados = array_merge($dados, $patientMap);
 
-
-        $template = "Cliente {name}, {age} anos, {sex}, admitida neste setor por HD : {diagnosis}, proveniente de {internment_reason}, {movement} e acompanhado por {responsible}.
-                Segue em {estado-geral}, {consciencia}, {orientacao}, {comunicação}, {humorestado-emocional}, {hidratação}, {estado-nutricional}, {pele}, {higiene corporal}.
-                .";
-
-
+        $template = "Cliente {name}, {age} anos, {sex}, admitida neste setor por HD : {diagnosis}, proveniente de : {internment_reason}, {movement} e acompanhado por {responsible}.
+            Segue em {estado-geral}, {consciencia}, {orientacao}, {comunicacao}, {humorestado-emocional}, {hidratacao}, {estado-nutricional}, {pele}, {higiene-corporal}.
+            .";
 
         return strtr($template, $dados);
     }
+
 
 
 

@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
 //        ], 'blade-mdi'); // icone do botao pra gerar hora atual do form patient
         FilamentColor::register([
            'slate'=>Color::hex('#505050'),
-           'yellow' =>Color::hex('#fbff00')
+           'amber' =>Color::hex('#f59e0b')
         ]);
 
     }

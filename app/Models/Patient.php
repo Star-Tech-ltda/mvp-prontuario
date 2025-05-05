@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MaritalStatus;
 use App\Enums\Sex;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,5 +55,36 @@ class Patient extends Model
         static::saving(function ($model) {
             $model->created_by = auth()->id();
         });
+
+        static::updated(function ($patient) {
+            $evolutions = $patient->evolutions;
+
+            foreach ($evolutions as $evolution) {
+                $biometricData = $evolution->biometricData;
+                dd($biometricData);
+
+                if ($biometricData && $patient->birthdate) {
+                    $age = Carbon::parse($patient->birthdate)->age;
+
+                    if ((int) $biometricData->age !== (int) $age) {
+                        $biometricData->update(['age' => $age]);
+                    }
+
+                }
+
+                $evolution->load([
+                    'assessmentOptions.assessmentGroup',
+                    'patient',
+                    'calculatedMetrics',
+                ]);
+
+                $evolution->updateQuietly([
+                    'evolution_text' => $evolution->generateEvolutionText($biometricData),
+                ]);
+            }
+        });
+
+
+
     }
 }

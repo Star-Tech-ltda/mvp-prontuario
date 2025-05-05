@@ -37,7 +37,12 @@ class CreateEvolution extends CreateRecord
             );
         }
 
-        $record->load('assessmentOptions');
+        $record->load(
+            'assessmentOptions.assessmentGroup',
+            'patient',
+            'biometricData',
+            'calculatedMetrics'
+        );
 
         $this->record->updateQuietly([
             'evolution_text' => $this->record->generateEvolutionText(),

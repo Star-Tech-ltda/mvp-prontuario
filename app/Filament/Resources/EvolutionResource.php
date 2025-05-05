@@ -24,10 +24,16 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
 
 
 class EvolutionResource extends Resource
@@ -41,6 +47,15 @@ class EvolutionResource extends Resource
     protected static ?string $cluster = ManagerPatients::class;
     protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (!auth()->user()->is_admin) {
+            $query->where('created_by', auth()->id());
+        }
+        return $query;
+    }
     public static function form(Form $form): Form
     {
         return $form
@@ -53,7 +68,9 @@ class EvolutionResource extends Resource
                                Grid::make(1)
                                    ->schema([
                                        Select::make('patient_id')
-                                           ->relationship('patient', 'name')
+                                           ->relationship('patient', 'name',
+                                            modifyQueryUsing: fn ($query) => $query->where('created_by', auth()->id())
+                                           )
                                            ->label('Paciente')
                                            ->required()
                                            ->validationMessages([
@@ -202,18 +219,47 @@ class EvolutionResource extends Resource
                     ->label('Paciente')
                 ->label('Paciente'),
 
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Realizado em')
-                    ->dateTime()
-                    ->sortable()
+                Tables\Columns\TextColumn::make('patient.internment_reason')
+                ->label('Motivo da Internação'),
+
+                TextColumn::make('evolution_text')
+                    ->alignCenter()
+                    ->label('Texto de Evolução')
+                    ->icon('heroicon-o-clipboard')
+                    ->copyable()
+                    ->copyMessage('Texto copiado com sucesso!')
+                    ->formatStateUsing(fn ()=> new HtmlString( '<span></span>'))
+
                   ,
             ])
+
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+
+                Tables\Actions\Action::make('View Information')
+                    ->label('Detalhes')
+                    ->color('slate')
+                    ->icon('heroicon-s-eye')
+                    ->infolist([
+                        \Filament\Infolists\Components\Section::make('Evolução')
+                            ->schema([
+                                TextEntry::make('evolution_text')
+                                    ->label(''),
+                            ]),
+
+                            TextEntry::make('created_at')
+                            ->label('Realizada em:')
+                            ->columns(),
+                    ])
+                ->modalSubmitAction(false)
+                ->modalCancelAction(
+                   fn($action)=>$action->label('Fechar')
+                ),
+                Tables\Actions\EditAction::make()->color('amber'),
                 Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -245,7 +291,6 @@ class EvolutionResource extends Resource
         return [
             Actions\CreateAction::make()
                 ->after(function (Evolution $record, array $data) {
-                    // Chamar seu service aqui
                     MetricInterpreterService::handle($data, $record->id);
                 }),
         ];

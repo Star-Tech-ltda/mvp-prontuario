@@ -16,6 +16,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -197,7 +198,11 @@ class EvolutionsRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('observation')
             ->columns([
-                Tables\Columns\TextColumn::make('observation'),
+                Tables\Columns\TextColumn::make('created_at')
+                ->label('Realizado em'),
+                Tables\Columns\TextColumn::make('evolution_text')
+                ->label('Resultado')
+                ->limit(50),
             ])
             ->filters([
                 //
@@ -206,8 +211,29 @@ class EvolutionsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make(),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+
+                Tables\Actions\Action::make('View Information')
+                    ->label('Detalhes')
+                    ->color('slate')
+                    ->icon('heroicon-s-eye')
+                    ->infolist([
+                        \Filament\Infolists\Components\Section::make('Evolução')
+                            ->schema([
+                                TextEntry::make('evolution_text')
+                                    ->label(''),
+                            ]),
+
+                        TextEntry::make('created_at')
+                            ->label('Realizada em:')
+                            ->columns(),
+                    ])
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(
+                        fn($action)=>$action->label('Fechar')
+                    ),
+                Tables\Actions\EditAction::make()->color('amber'),
                 Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
