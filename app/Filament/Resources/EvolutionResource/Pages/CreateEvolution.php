@@ -30,12 +30,13 @@ class CreateEvolution extends CreateRecord
 
         $record->assessmentOptions()->sync($selectedOptionIds);
 
-        if ($record->biometricData()->exists()) {
+        if ($record->biometricData) {
             MetricInterpreterService::handle(
                 $record->biometricData->toArray(),
                 $record->id
             );
         }
+
 
         $record->load(
             'assessmentOptions.assessmentGroup',
