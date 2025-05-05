@@ -47,6 +47,16 @@ class EvolutionResource extends Resource
     protected static ?string $cluster = ManagerPatients::class;
     protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
+    public static function getModelLabel(): string
+    {
+        return 'Evolução';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Evoluções';
+    }
+
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
