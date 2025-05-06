@@ -143,6 +143,7 @@ class PatientResource extends Resource
                 Section::make('Informações de internação ')
                     ->schema([
                         DatePicker::make('internment_date')
+                            ->helperText('Clique no ícone de calendário para gerar a data atual')
                             ->label('Dia de internação Hospitalar')
                             ->native(false)
                             ->reactive()
@@ -162,8 +163,10 @@ class PatientResource extends Resource
                         TextInput::make('internment_reason')
                             ->label('Proveniente de ')
                             ->maxLength(255)
-                            ->columnSpan(2)
-                            ,
+                            ->columnSpan([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
 
 
                         TextInput::make('internment_location')
@@ -177,8 +180,15 @@ class PatientResource extends Resource
                         TextInput::make('diagnosis')
                             ->label('Diagnóstico Médico - HDM')
                             ->maxLength(255)
-                           ->columnSpan(2) ,
-                    ])->columns(4),
+                            ->columnSpan([
+                                'default' => 1,
+                                'md' => 2,
+                            ]),
+                    ])->columns([
+                        'default' => 1,
+                        'md' => 2,
+                        'lg'=> 4,
+                    ]),
 
             ]) ;
     }
