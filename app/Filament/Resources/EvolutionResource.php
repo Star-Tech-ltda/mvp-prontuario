@@ -214,10 +214,15 @@ class EvolutionResource extends Resource
                                 TextEntry::make('evolution_text')
                                     ->label(''),
                             ]),
+                        \Filament\Infolists\Components\Grid::make(2)
+                            ->schema([
+                                TextEntry::make('created_at')->label('Realizada em:'),
+                                ...(!empty($record->observation) ? [
+                                    TextEntry::make('observation')->label('Observações:'),
+                                ] : []),
 
-                            TextEntry::make('created_at')
-                            ->label('Realizada em:')
-                            ->columns(),
+                            ]),
+
                     ])
                 ->modalSubmitAction(false)
                 ->modalCancelAction(
