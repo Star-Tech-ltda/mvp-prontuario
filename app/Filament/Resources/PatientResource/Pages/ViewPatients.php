@@ -14,7 +14,7 @@ class ViewPatients extends ViewRecord
     public function getRelationManagers(): array
     {
         return [
-            EvolutionsRelationManager::class,
+
         ];
     }
 }
