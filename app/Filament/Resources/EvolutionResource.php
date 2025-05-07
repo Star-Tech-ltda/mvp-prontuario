@@ -101,93 +101,49 @@ class EvolutionResource extends Resource
                                                    $set('temp_diagnosis', null);
                                                }
                                            }),
-                                       Section::make('Dados do paciente')
-                                           ->relationship('biometricData')
-                                           ->schema([
-                                               Grid::make(3)->schema([
-                                                   TextInput::make('age')
-                                                       ->label('Idade')
-                                                       ->numeric()
-                                                       ->readOnly(),
 
-                                                   Placeholder::make('diagnostico')
-                                                       ->label('Diagnóstico')
-                                                       ->content(fn ($get, $livewire) => $livewire->data['temp_diagnosis'] ?? 'Não possui HDM')
-                                                       ->reactive(),
-                                               ]),
-                                           ]),
                                     ]),
 
-                                    Section::make('Pressão Arterial')
-                                        ->relationship('biometricData')
-                                        ->schema([
+                                Section::make('Dados Biométricos')
+                                    ->relationship('biometricData')
+                                    ->schema([
+
+                                        Section::make('Dados do paciente')->schema([
                                             Grid::make(2)->schema([
-                                                TextInput::make('systolic_pressure')
-                                                    ->label('Pressão Sistólica')
-                                                    ->numeric()
-                                                    ->suffix('mmHg'),
-                                                TextInput::make('diastolic_pressure')
-                                                    ->label('Pressão Diastólica')
-                                                    ->numeric()
-                                                    ->suffix('mmHg'),
+                                                TextInput::make('age')->label('Idade')->numeric()->readOnly(),
+                                                Placeholder::make('diagnostico')
+                                                    ->label('Diagnóstico')
+                                                    ->content(fn ($get, $livewire) => $livewire->data['temp_diagnosis'] ?? 'Não possui HDM'),
                                             ])
                                         ]),
 
-                                    Section::make('Frequências')
-                                        ->relationship('biometricData')
-                                        ->schema([
+                                        Section::make('Pressão Arterial')->schema([
+                                            Grid::make(2)->schema([
+                                                TextInput::make('systolic_pressure')->label('Pressão Sistólica')->numeric(),
+                                                TextInput::make('diastolic_pressure')->label('Pressão Diastólica')->numeric(),
+                                            ])
+                                        ]),
+
+                                        Section::make('Frequências')->schema([
                                             Grid::make(3)->schema([
-                                                TextInput::make('heart_rate')
-                                                    ->label('Frequência Cardíaca')
-                                                    ->numeric()
-                                                    ->suffix('bpm')
-                                                    ->suffixIcon('mdi-heart-pulse')
-                                                ,
-                                                TextInput::make('respiratory_rate')
-                                                    ->label('Frequência Respiratória')
-                                                    ->numeric()->suffix('rpm')
-                                                ->suffixIcon('mdi-lungs'),
-                                                TextInput::make('oxygen_saturation')
-                                                    ->label('Saturação de Oxigênio (%)')
-                                                    ->numeric()
-                                                ->suffix('%/O2'),
+                                                TextInput::make('heart_rate')->label('Frequência Cardíaca')->numeric(),
+                                                TextInput::make('respiratory_rate')->label('Frequência Respiratória')->numeric(),
+                                                TextInput::make('oxygen_saturation')->label('Saturação de O2')->numeric(),
                                             ])
                                         ]),
 
-                                    Section::make('Medidas Corporais')
-                                        ->relationship('biometricData')
-                                        ->schema([
+                                        Section::make('Medidas Corporais')->schema([
                                             Grid::make(3)->schema([
-                                                TextInput::make('height')
-                                                    ->label('Altura (cm)')
-                                                    ->numeric()
-                                                    ->step(0.01)
-                                                    ->extraInputAttributes([
-                                                        'min' => 0,
-                                                    ])
-                                                    ->suffixIcon('mdi-human-male-height-variant'),
-
-
-                                                TextInput::make('weight')->label('Peso (kg)')
-                                                    ->numeric()
-                                                    ->step(0.01)
-                                                    ->extraInputAttributes([
-                                                        'min' => 0,
-                                                    ])
-                                                    ->suffixIcon('mdi-weight-kilogram'),
-
-
-                                                TextInput::make('temperature')
-                                                    ->label('Temperatura (°C)')
-                                                    ->numeric()
-                                                    ->suffixIcon('mdi-temperature-celsius')
-                                                    ->extraInputAttributes([
-                                                        'min' => 0,
-                                                    ]),
+                                                TextInput::make('height')->label('Altura (cm)')->numeric()->step(0.01),
+                                                TextInput::make('weight')->label('Peso (kg)')->numeric()->step(0.01),
+                                                TextInput::make('temperature')->label('Temperatura')->numeric(),
                                             ])
                                         ]),
 
-                                ]),
+                                    ])
+
+
+                            ]),
 
                         Step::make('Checklist')
                             ->description('Selecione conforme o estado do Paciente')
@@ -299,10 +255,7 @@ class EvolutionResource extends Resource
     public static function getActions(): array
     {
         return [
-            Actions\CreateAction::make()
-                ->after(function (Evolution $record, array $data) {
-                    MetricInterpreterService::handle($data, $record->id);
-                }),
+            //
         ];
     }
 }

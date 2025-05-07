@@ -30,14 +30,6 @@ class CreateEvolution extends CreateRecord
 
         $record->assessmentOptions()->sync($selectedOptionIds);
 
-        if ($record->biometricData) {
-            MetricInterpreterService::handle(
-                $record->biometricData->toArray(),
-                $record->id
-            );
-        }
-
-
         $record->load(
             'assessmentOptions.assessmentGroup',
             'patient',
@@ -49,5 +41,11 @@ class CreateEvolution extends CreateRecord
             'evolution_text' => $this->record->generateEvolutionText(),
         ]);
 
+        if ($record->biometricData) {
+            MetricInterpreterService::handle(
+                $record->biometricData->toArray(),
+                $record->id
+            );
+        }
     }
 }
