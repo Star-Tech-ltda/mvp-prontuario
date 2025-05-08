@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Patient extends Model
 {
@@ -61,7 +63,7 @@ class Patient extends Model
 
             foreach ($evolutions as $evolution) {
                 $biometricData = $evolution->biometricData;
-                dd($biometricData);
+
 
                 if ($biometricData && $patient->birthdate) {
                     $age = Carbon::parse($patient->birthdate)->age;

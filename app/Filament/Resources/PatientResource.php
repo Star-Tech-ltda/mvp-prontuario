@@ -8,6 +8,7 @@ use App\Filament\Clusters\Evolutions;
 use App\Filament\Clusters\ManagerPatients;
 use App\Filament\Clusters\Patients;
 use App\Filament\Resources\PatientResource\Pages;
+use App\Filament\Resources\PatientResource\RelationManagers\EvolutionsRelationManager;
 use App\Models\Patient;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
@@ -245,7 +246,7 @@ class PatientResource extends Resource
     public static function getRelations(): array
     {
         return [
-       //
+           EvolutionsRelationManager::class
 
         ];
     }
