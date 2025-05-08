@@ -21,17 +21,22 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class EvolutionsRelationManager extends RelationManager
 {
     protected static string $relationship = 'evolutions';
 
 
-    public function hasCombinedRelationManagerTabsWithForm(): bool
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
-        return true;
+        return 'Evoluções deste Paciente';
     }
 
+    public function isReadOnly(): bool
+    {
+        return false; //ativar a criação de evoluções na página de visualização do paciente
+    }
 
     public function form(Form $form): Form
     {
@@ -172,6 +177,8 @@ class EvolutionsRelationManager extends RelationManager
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
+                    ->label('Nova evolução')
+                    ->icon('mdi-plus')
                     ->mutateFormDataUsing(function (array $data, $livewire): array {
                         $data['patient_id'] = $livewire->ownerRecord->id;
 

@@ -10,6 +10,10 @@ class EditPatient extends EditRecord
 {
     protected static string $resource = PatientResource::class;
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
     protected function getHeaderActions(): array
     {
         return [
