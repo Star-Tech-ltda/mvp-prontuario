@@ -69,8 +69,7 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldRegisterNavigation(false)
                     ->shouldShowAvatarForm(
                         value: true,
-                        directory: 'avatars', // image will be stored in 'storage/app/public/avatars
-                        rules: 'mimes:jpeg,png|max:1024' //only accept jpeg and png files with a maximum size of 1MB
+                        rules: 'mimes:jpeg,png|max:2024' //only accept jpeg and png files with a maximum size of 2MB
                     )
                 ,
                 ThemesPlugin::make()

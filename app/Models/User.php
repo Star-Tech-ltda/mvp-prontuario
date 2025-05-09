@@ -62,10 +62,18 @@ class User extends Authenticatable implements HasAvatar
         return $this->hasMany(Evolution::class, 'created_by');
     }
 
+//    public function getFilamentAvatarUrl(): ?string
+//    {
+//        return Storage::url(path: $this->avatar_url);
+//    }
 
     public function getFilamentAvatarUrl(): ?string
     {
-        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
-        return $this->$avatarColumn ? Storage::url("$this->$avatarColumn") : null;
+        return asset('storage/'.$this->avatar_url);
     }
+//    public function getFilamentAvatarUrl(): ?string
+//    {
+//        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
+//        return $this->$avatarColumn ? Storage::url("$this->$avatarColumn") : null;
+//    }
 }
