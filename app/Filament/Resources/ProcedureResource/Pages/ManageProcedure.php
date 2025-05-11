@@ -14,7 +14,8 @@ class ManageProcedure extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->slideOver('left'),
+            CreateAction::make()->slideOver('left')
+                ->modalWidth('lg'),
         ];
     }
 }

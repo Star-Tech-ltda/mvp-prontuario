@@ -3,15 +3,23 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\ProcedureCluster;
-use App\Filament\Resources\ProcedureResource\Pages;
+use App\Filament\Resources\ProcedureResource\Pages\ManageProcedure;
 use App\Filament\Resources\ProcedureResource\RelationManagers;
 use App\Models\Procedure;
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Support\RawJs;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Leandrocfe\FilamentPtbrFormFields\Money;
 
 class ProcedureResource extends Resource
 {
@@ -36,43 +44,45 @@ class ProcedureResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('procedure_category_id')
+                Select::make('procedure_category_id')
                     ->relationship('procedureCategory', 'name')
                     ->label('Categoria do Procedimento')
                     ->required(),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('Nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('default_price')
+                TextInput::make('default_price')
                     ->label('Valor Padrão')
                     ->required()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->numeric(),
-                Forms\Components\Toggle::make('editable_price')
+                Toggle::make('editable_price')
                     ->label('Valor Editável')
-                    ->required(),
-            ]);
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('procedureCategory.name')
+                TextColumn::make('procedureCategory.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('default_price')
+                TextColumn::make('default_price')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('editable_price')
+                IconColumn::make('editable_price')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -81,11 +91,11 @@ class ProcedureResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -100,7 +110,7 @@ class ProcedureResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageProcedure::route('/'),
+            'index' => ManageProcedure::route('/'),
         ];
     }
 }

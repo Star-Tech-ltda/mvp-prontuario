@@ -30,12 +30,18 @@ class HourlyRateResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nome')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('adjustment_percent')
+                    ->label('Porcentagem de Ajuste (%)')
+                    ->placeholder('ex: 20')
+                    ->suffix('%')
                     ->required()
-                    ->numeric(),
-            ]);
+                    ->minValue(0)
+                    ->numeric()
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table

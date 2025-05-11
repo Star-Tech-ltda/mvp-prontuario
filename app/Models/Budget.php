@@ -13,7 +13,7 @@ class Budget extends Model
 
     protected $fillable = [
         'user_id',
-        'time_context_id',
+        'hourly_rate_id',
         'payment_method_id',
         'profit_margin',
         'base_price',
@@ -32,7 +32,7 @@ class Budget extends Model
         return $this->belongsTo(PaymentMethod::class);
     }
 
-    public function timeContext(): BelongsTo
+    public function hourlyRate(): BelongsTo
     {
         return $this->belongsTo(HourlyRate::class);
     }

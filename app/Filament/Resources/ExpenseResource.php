@@ -3,15 +3,23 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Clusters\ExpenseCluster;
-use App\Filament\Resources\ExpenseResource\Pages;
+use App\Filament\Resources\ExpenseResource\Pages\ManageExpense;
 use App\Filament\Resources\ExpenseResource\RelationManagers;
 use App\Models\Expense;
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Support\RawJs;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Leandrocfe\FilamentPtbrFormFields\Money;
 
 class ExpenseResource extends Resource
 {
@@ -36,45 +44,46 @@ class ExpenseResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('expense_category_id')
+                Select::make('expense_category_id')
                     ->relationship('expenseCategory', 'name')
                     ->label('Qual a categoria desta Despesa?')
                     ->required(),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->required()
                     ->label('Nome')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('default_price')
+                TextInput::make('default_price')
                     ->label('Valor Padrão')
                     ->required()
                     ->numeric()
-                    ->minValue(0)
-                    ->step(0.01),
-                Forms\Components\Toggle::make('editable_price')
-                    ->label('Valor Editável')
-                ,
-            ]);
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters('.')
+                    ->default('0,00'),
+                Toggle::make('editable_price')
+                    ->label('Valor Editável'),
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('expense_category_id')
+                TextColumn::make('expense_category_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('default_price')
+                TextColumn::make('default_price')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\IconColumn::make('editable_price')
+                IconColumn::make('editable_price')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -83,11 +92,11 @@ class ExpenseResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -102,7 +111,7 @@ class ExpenseResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ManageExpense::route('/'),
+            'index' => ManageExpense::route('/'),
         ];
     }
 }

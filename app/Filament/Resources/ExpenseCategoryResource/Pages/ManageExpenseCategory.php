@@ -13,7 +13,8 @@ class ManageExpenseCategory extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->slideOver('left'),
+            CreateAction::make()->slideOver('left')
+                ->modalWidth('2xl'),
         ];
     }
 }
