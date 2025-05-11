@@ -4,16 +4,18 @@ namespace App\Filament\Resources\ProcedureCategoryResource\Pages;
 
 use App\Filament\Resources\ProcedureCategoryResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ManageRecords;
 
-class ListProcedureCategories extends ListRecords
+class ManageProcedureCategory extends ManageRecords
 {
     protected static string $resource = ProcedureCategoryResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make()->slideOver('left')
+                ->modalWidth('2xl'),
         ];
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('time_context_id')->nullable()->constrained()->noActionOnDelete();
+            $table->foreignId('hourly_rate_id')->nullable()->constrained()->noActionOnDelete();
             $table->foreignId('payment_method_id')->nullable()->constrained()->noActionOnDelete();
             $table->decimal('profit_margin');
             $table->decimal('base_price');

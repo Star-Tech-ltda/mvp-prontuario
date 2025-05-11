@@ -2,53 +2,59 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\CostType;
 use App\Filament\Clusters\ProcedureCluster;
-use App\Filament\Resources\ProcedureCategoryResource\Pages;
+use App\Filament\Resources\ProcedureCategoryResource\Pages\ManageProcedureCategory;
+use App\Filament\Resources\ProcedureCategoryResource\Pages\ViewProcedureCategory;
 use App\Filament\Resources\ProcedureCategoryResource\RelationManagers;
 use App\Models\ProcedureCategory;
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\SubNavigationPosition;
 use Filament\Resources\Resource;
-use Filament\Tables;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProcedureCategoryResource extends Resource
 {
     protected static ?string $model = ProcedureCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $cluster = ProcedureCluster::class;
 
-    protected static ?string $navigationLabel = 'Categoria de Procedimento';
+    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
 
-    protected static ?string $pluralLabel = 'Categorias de Procedimentos';
+    protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationLabel = 'Categorias';
+
+    protected static ?int $navigationSort = 1;
 
     public static function getModelLabel(): string
     {
         return 'Categoria';
     }
 
-
-    protected static ?string $cluster = ProcedureCluster::class;
-    protected static SubNavigationPosition $subNavigationPosition = subNavigationPosition::Top;
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
+                TextInput::make('name')
                     ->label('Nome')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('cost_type')
-                    ->label('Tipo de custo')
-                    ->required(),
-                Forms\Components\Textarea::make('description')
                     ->required()
+                    ->maxLength(255),
+                Select::make('cost_type')
+                    ->label('Tipo de custo')
+                    ->required()
+                    ->native(false)
+                    ->options(collect(CostType::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()])),
+                Textarea::make('description')
                     ->label('Descrição')
+                    ->required()
                     ->columnSpanFull(),
             ]);
     }
@@ -57,14 +63,14 @@ class ProcedureCategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('cost_type'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('cost_type'),
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -73,11 +79,11 @@ class ProcedureCategoryResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -92,9 +98,8 @@ class ProcedureCategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListProcedureCategories::route('/'),
-            'create' => Pages\CreateProcedureCategory::route('/create'),
-            'edit' => Pages\EditProcedureCategory::route('/{record}/edit'),
+            'index' => ManageProcedureCategory::route('/'),
+            'view' => ViewProcedureCategory::route('/{record}'),
         ];
     }
 }

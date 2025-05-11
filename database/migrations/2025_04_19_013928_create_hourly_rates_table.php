@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('time_contexts', function (Blueprint $table) {
+        Schema::create('hourly_rates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->decimal('adjustment_percent');
+            $table->timestamps();
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('time_contexts');
+        Schema::dropIfExists('hourly_rates');
     }
 };

@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('budget_expense', function (Blueprint $table) {
             $table->id();
             $table->foreignId('budget_id')->constrained()->onDelete('cascade');
-            $table->foreignId('expense_id')->constrained()->onDelete('cascade');
+            $table->foreignId('expense_id')->constrained();
             $table->integer('quantity')->default(1);
             $table->decimal('price_override')->nullable();
+            $table->timestamps();
         });
     }
 

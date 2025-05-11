@@ -26,4 +26,18 @@ enum CostType :string
             self::FX=>'Fixo',
         };
     }
+
+    public function pluralLabel(): string
+    {
+        return match ($this) {
+            self::UN => 'Unidades',
+            self::USE => 'Usos',
+            self::SER => 'Serviços',
+            self::PER => 'Porcentagens',
+            self::KM => 'Quilômetros',
+            self::TM => 'Horas',
+            self::MON => 'Meses',
+            self::FX => 'Fixos',
+        };
+    }
 }

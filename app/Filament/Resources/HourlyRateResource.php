@@ -2,37 +2,51 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TimeContextResource\Pages;
-use App\Models\TimeContext;
+use App\Filament\Resources\HourlyRateResource\Pages;
+use App\Models\HourlyRate;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class TimeContextResource extends Resource
+class HourlyRateResource extends Resource
 {
-    protected static ?string $model = TimeContext::class;
+    protected static ?string $model = HourlyRate::class;
 
-    protected static ?string $navigationLabel = 'Contextos de Horário';
+    protected static ?string $navigationLabel = 'Tarifa Horária';
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
+
+    protected static ?string $navigationGroup = 'Administração';
+
+    public static function getModelLabel(): string
+    {
+        return 'Tarifa Horária';
+    }
 
     public static function canAccess():bool
     {
       return auth()->user()->is_admin;
     }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nome')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('adjustment_percent')
+                    ->label('Porcentagem de Ajuste (%)')
+                    ->placeholder('ex: 20')
+                    ->suffix('%')
                     ->required()
-                    ->numeric(),
-            ]);
+                    ->minValue(0)
+                    ->numeric()
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
@@ -68,9 +82,7 @@ class TimeContextResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTimeContexts::route('/'),
-            'create' => Pages\CreateTimeContext::route('/create'),
-            'edit' => Pages\EditTimeContext::route('/{record}/edit'),
+            'index' => Pages\ManageHourlyRate::route('/'),
         ];
     }
 }
