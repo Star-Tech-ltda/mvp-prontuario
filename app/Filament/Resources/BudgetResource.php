@@ -65,6 +65,7 @@ class BudgetResource extends Resource
                         ->description('Informe as atividades e despesas')
                         ->schema([
                             Select::make('hourly_rate')
+                                ->native(false)
                                 ->label('Taxa de Horário')
                                 ->required()
                                 ->prefixIcon('heroicon-o-clock')
@@ -103,6 +104,7 @@ class BudgetResource extends Resource
                         Group::make([
                             Select::make('payment_method')
                                 ->label('Método de Pagamento')
+                                ->native(false)
                                 ->required()
                                 ->prefixIcon('heroicon-o-credit-card')
                                 ->columnSpan(2)

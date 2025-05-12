@@ -45,6 +45,7 @@ class ProcedureResource extends Resource
         return $form
             ->schema([
                 Select::make('procedure_category_id')
+                    ->native(false)
                     ->relationship('procedureCategory', 'name')
                     ->label('Categoria do Procedimento')
                     ->required(),

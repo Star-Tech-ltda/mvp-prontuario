@@ -107,6 +107,7 @@ class PatientResource extends Resource
 
 
                         Select::make('sex')
+                            ->native(false)
                             ->options(collect(Sex::cases())->mapWithKeys(fn ($case)=> [$case->value=>$case->label()]))
                             ->label('Sexo do Paciente'),
 

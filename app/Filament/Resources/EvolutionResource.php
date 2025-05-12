@@ -78,6 +78,7 @@ class EvolutionResource extends Resource
                                Grid::make(1)
                                    ->schema([
                                        Select::make('patient_id')
+                                           ->native(false)
                                            ->relationship('patient', 'name',
                                             modifyQueryUsing: fn ($query) => $query->where('created_by', auth()->id())
                                            )

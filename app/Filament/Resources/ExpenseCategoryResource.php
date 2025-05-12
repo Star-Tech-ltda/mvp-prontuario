@@ -49,6 +49,7 @@ class ExpenseCategoryResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Select::make('cost_type')
+                    ->native(false)
                     ->label('Tipo de Custo')
                     ->required()
                     ->native(false)

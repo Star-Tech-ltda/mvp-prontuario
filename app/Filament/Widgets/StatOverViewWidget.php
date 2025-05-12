@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Auth;
 
 class StatOverViewWidget extends BaseWidget
 {
+    public static function canView(): bool
+    {
+        return auth()->check() && !auth()->user()->isAdmin();
+    }
     protected function getStats(): array
     {
         $userId = Auth::id();

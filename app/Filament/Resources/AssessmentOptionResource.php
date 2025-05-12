@@ -49,6 +49,7 @@ class AssessmentOptionResource extends Resource
                 Select::make('assessment_group_id')
                     ->relationship('assessmentGroup', 'name')
                     ->required()
+                    ->native(false)
                     ->debounce(500)
                     ->label('Grupo Pertencente')
                     ->afterStateUpdated(function (callable $set, $state) {
@@ -68,6 +69,7 @@ class AssessmentOptionResource extends Resource
                     ->columnSpan(2),
 
                 Select::make('severity')
+                    ->native(false)
                     ->required()
                     ->options(collect(Severity::cases())->mapWithKeys(fn ($case)=> [$case->value=> $case->label()]))
                     ->label('Gravidade')

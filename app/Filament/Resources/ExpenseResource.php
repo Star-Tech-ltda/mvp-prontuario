@@ -48,7 +48,8 @@ class ExpenseResource extends Resource
                 Select::make('expense_category_id')
                     ->relationship('expenseCategory', 'name')
                     ->label('Qual a categoria desta Despesa?')
-                    ->required(),
+                    ->required()
+                    ->native(false),
                 TextInput::make('name')
                     ->required()
                     ->label('Nome')

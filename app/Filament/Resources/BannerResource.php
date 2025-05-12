@@ -62,7 +62,7 @@ class BannerResource extends Resource
                     ->searchable()
                     ->label('Titulo'),
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('Imagen')
+                    ->label('Imagem')
                     ->circular(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(' d/m/Y')
