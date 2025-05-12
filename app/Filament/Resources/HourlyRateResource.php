@@ -56,6 +56,7 @@ class HourlyRateResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('adjustment_percent')
+                    ->label('Porcentagem de Ajuste (%)')
                     ->numeric()
                     ->sortable(),
             ])

@@ -26,6 +26,7 @@ use Filament\Resources\Resource;
 use App\Models\ProcedureCategory;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
+use Illuminate\Database\Eloquent\Builder;
 
 class BudgetResource extends Resource
 {
@@ -44,9 +45,15 @@ class BudgetResource extends Resource
         return 'Orçamento';
     }
 
-    public static function canAccess(): bool
+
+    public static function getEloquentQuery(): Builder
     {
-        return auth()->check() && auth()->user()->isAdmin();
+        $query = parent::getEloquentQuery();
+
+        if (!auth()->user()->is_admin) {
+            $query->where('created_by', auth()->id());
+        }
+        return $query;
     }
 
     public static function form(Form $form): Form
@@ -166,7 +173,8 @@ class BudgetResource extends Resource
             ->columns([
                 TextColumn::make('user.name')
                     ->label('Criado Por')
-                    ->searchable(),
+                    ->searchable()
+                    ->visible(fn () => auth()->user()?->is_admin == 1),
                 TextColumn::make('paymentMethod.name')
                     ->label('Método de Pagamento'),
                 TextColumn::make('hourlyRate.adjustment_percent')

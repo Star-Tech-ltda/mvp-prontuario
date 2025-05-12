@@ -19,23 +19,33 @@ class BannerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Publicidade';
     protected static ?string $navigationGroup = 'Administração';
 
+
+    public static function getModelLabel(): string
+    {
+        return 'Publicidade';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Publicidades';
+    }
 
     public static function canAccess(): bool
     {
         return auth()->check() && auth()->user()->isAdmin();
     }
-
-
-
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('tittle')
+                    ->label('Titulo')
                     ->maxLength(255),
                 Forms\Components\FileUpload::make('image')
+                    ->label('Imagem')
                     ->image()
                     ->directory('banners')
                     ->visibility('public')
@@ -49,12 +59,15 @@ class BannerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('tittle')
-                    ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                    ->searchable()
+                    ->label('Titulo'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Imagen')
+                    ->circular(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime(' d/m/Y')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Criado em '),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
