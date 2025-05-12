@@ -19,10 +19,14 @@ class BannerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function canAccess():bool
+    protected static ?string $navigationGroup = 'Administração';
+
+
+    public static function canAccess(): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->isAdmin();
     }
+
 
 
     public static function form(Form $form): Form

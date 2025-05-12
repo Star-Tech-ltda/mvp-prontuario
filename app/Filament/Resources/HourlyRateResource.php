@@ -25,9 +25,9 @@ class HourlyRateResource extends Resource
         return 'Tarifa Horária';
     }
 
-    public static function canAccess():bool
+    public static function canAccess(): bool
     {
-      return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->isAdmin();
     }
 
     public static function form(Form $form): Form

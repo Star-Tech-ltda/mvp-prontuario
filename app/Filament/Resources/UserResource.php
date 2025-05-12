@@ -19,6 +19,8 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-c-user-circle';
 
+    protected static ?string $navigationGroup = 'Administração';
+
     protected static ?string $pluralLabel = 'Usuarios';
     public static function getModelLabel(): string
     {
@@ -27,7 +29,7 @@ class UserResource extends Resource
 
     public static function canAccess(): bool
     {
-        return auth()->user()->is_admin;
+        return auth()->check() && auth()->user()->isAdmin();
     }
 
     public static function form(Form $form): Form
