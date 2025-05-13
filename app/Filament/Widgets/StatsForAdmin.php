@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StatsForAdmin extends BaseWidget
 {
+    protected static ?int $sort = 3;
     public static function canView(): bool
     {
         return auth()->check() && auth()->user()->isAdmin();

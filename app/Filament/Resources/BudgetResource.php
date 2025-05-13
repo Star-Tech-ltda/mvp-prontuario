@@ -51,7 +51,7 @@ class BudgetResource extends Resource
         $query = parent::getEloquentQuery();
 
         if (!auth()->user()->is_admin) {
-            $query->where('created_by', auth()->id());
+            $query->where('user_id', auth()->id());
         }
         return $query;
     }

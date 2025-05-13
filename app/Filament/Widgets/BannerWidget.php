@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 
 class BannerWidget extends Widget
 {
+    protected static ?int $sort = 2;
     protected static string $view = 'filament.widgets.banner-widget';
 
     public static function canView(): bool

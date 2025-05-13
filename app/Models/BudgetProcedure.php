@@ -11,6 +11,7 @@ class BudgetProcedure extends Pivot
     use HasFactory;
 
     public $incrementing = true;
+    public $timestamps = false;
 
     protected $fillable = [
         'budget_id',
