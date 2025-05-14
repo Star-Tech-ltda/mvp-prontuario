@@ -10,7 +10,8 @@ use Filament\Support\Facades\FilamentColor;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
-
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\Action;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -27,7 +28,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-
+        EditAction::configureUsing(function (EditAction $action) {
+            $action->color('amber'); // ou 'primary', 'warning', 'danger', etc.
+        });
 
 
 

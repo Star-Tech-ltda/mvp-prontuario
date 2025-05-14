@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -82,7 +83,10 @@ class UserResource extends Resource
                 ,
             ])
             ->filters([
-                //
+                TernaryFilter::make('is_admin')
+                    ->label('Usuários admin')
+                    ->trueLabel('Apenas admins')
+                    ->falseLabel('Apenas não-admins')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

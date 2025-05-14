@@ -66,8 +66,12 @@ class ExpenseCategoryResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable(),
-                TextColumn::make('cost_type'),
+                TextColumn::make('cost_type')
+                ->label('Tipo de Custo')
+                    ->formatStateUsing(fn(CostType $state) => $state->label())
+                ,
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

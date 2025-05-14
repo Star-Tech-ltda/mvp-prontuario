@@ -10,10 +10,11 @@ class ManageUsers extends ManageRecords
 {
     protected static string $resource = UserResource::class;
 
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+//            Actions\CreateAction::make(),
         ];
     }
 }

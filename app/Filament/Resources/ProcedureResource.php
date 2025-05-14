@@ -70,14 +70,18 @@ class ProcedureResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('procedureCategory.name')
+                    ->label('Categoria do Procedimento')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable(),
                 TextColumn::make('default_price')
+                    ->label('Preço Padrão')
                     ->numeric()
                     ->sortable(),
                 IconColumn::make('editable_price')
+                    ->label('Preço Editavel')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()

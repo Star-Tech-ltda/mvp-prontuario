@@ -71,15 +71,19 @@ class ExpenseResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('expense_category_id')
+                TextColumn::make('expenseCategory.name')
+                    ->label('Categoria da Despesa')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('name')
+                    ->label('Nome')
                     ->searchable(),
                 TextColumn::make('default_price')
+                    ->label('Preço Padrão')
                     ->numeric()
                     ->sortable(),
                 IconColumn::make('editable_price')
+                    ->label('Preço Editável')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
