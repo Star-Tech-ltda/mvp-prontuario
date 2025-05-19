@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -191,6 +192,30 @@ class EvolutionsRelationManager extends RelationManager
                     }),
             ])
             ->actions([
+                Tables\Actions\Action::make('View Information')
+                    ->label('Detalhes')
+                    ->color('slate')
+                    ->icon('heroicon-s-eye')
+                    ->infolist([
+                        \Filament\Infolists\Components\Section::make('Evolução')
+                            ->schema([
+                                TextEntry::make('evolution_text')
+                                    ->label(''),
+                            ]),
+                        \Filament\Infolists\Components\Grid::make(2)
+                            ->schema([
+                                TextEntry::make('created_at')->label('Realizada em:'),
+                                ...(!empty($record->observation) ? [
+                                    TextEntry::make('observation')->label('Observações:'),
+                                ] : []),
+
+                            ]),
+
+                    ])
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(
+                        fn($action)=>$action->label('Fechar')
+                    ),
                 Tables\Actions\EditAction::make()
                     ->mutateRecordDataUsing(function (array $data, Evolution $record): array {
                         return $this->prepareFormDataForEdit($data, $record);

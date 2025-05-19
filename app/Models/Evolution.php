@@ -14,7 +14,8 @@ class Evolution extends Model
         'patient_id',
         'created_by',
         'observation',
-        'evolution_text'
+        'evolution_text',
+        'ai_suggestion'
     ];
 
 
@@ -63,7 +64,7 @@ class Evolution extends Model
     {
         static::saving(function (Evolution $evolution) {
             $evolution->created_by = auth()->id();
-            $evolution->evolution_text = $evolution->generateEvolutionText();
+//            $evolution->evolution_text = $evolution->generateEvolutionText();
         });
 
     }
@@ -76,13 +77,43 @@ class Evolution extends Model
             'biometricData',
         ]);
 
+
         $biometricData = $biometricData ?? $this->biometricData;
+
+
+        // Busca direto no banco, filtrando pelo evolution_id
+        $metrics = CalculatedMetric::where('evolution_id', $this->id)->get();
+
+        $metricAbbreviations = [
+            'BMI' => 'BMI',
+            'BloodPressure' => 'BP',
+            'HeartRate' => 'HR',
+            'RespiratoryRate' => 'RR',
+            'OxygenSaturation' => 'OS',
+            'Temperature' => 'TP',
+        ];
+
+        $metricsInterpretations = $metrics->mapWithKeys(function ($metric) use ($metricAbbreviations) {
+            $calculatedType = $metric->calculated_type instanceof \BackedEnum
+                ? $metric->calculated_type->value
+                : (string) $metric->calculated_type;
+
+            $abbr = $metricAbbreviations[$calculatedType] ?? $calculatedType;
+
+            return ['{' . $abbr . '}' => $metric->interpretation];
+        })->toArray();
+
+
+        logger()->info('Metrics:', $metrics->toArray());
+        logger()->info('MetricsInterpretations:', $metricsInterpretations);
 
         $dados = [];
 
         foreach ($this->assessmentOptions as $option) {
             $dados['{' . $option->assessmentGroup->slug . '}'] = $option->description;
         }
+
+
 
         $patientMap = [
             '{name}' => $this->patient->name,
@@ -95,11 +126,11 @@ class Evolution extends Model
             '{internment_reason}' => $this->patient->internment_reason ?? 'Não Informado',
         ];
 
-        $dados = array_merge($dados, $patientMap);
+        $dados = array_merge($dados, $patientMap, $metricsInterpretations);
 
         $template = "Cliente {name}, {age} anos, {sex}, admitida neste setor por HD : {diagnosis}, proveniente de : {internment_reason}, {movement} e acompanhado por {responsible}.
             Segue em {estado-geral}, {consciencia}, {orientacao}, {comunicacao}, {humorestado-emocional}, {hidratacao}, {estado-nutricional}, {pele}, {higiene-corporal}.
-            .";
+            Apresenta IMC :{BMI}, com pressão arterial - {BP}, frequência cardíaca - {HR}, frequência respiratória - {RR}, saturação - {OS} e temperatura - {TP}.";
 
         return strtr($template, $dados);
     }

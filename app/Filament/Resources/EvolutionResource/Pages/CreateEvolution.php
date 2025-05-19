@@ -37,15 +37,18 @@ class CreateEvolution extends CreateRecord
             'calculatedMetrics'
         );
 
-        $this->record->updateQuietly([
-            'evolution_text' => $this->record->generateEvolutionText(),
-        ]);
-
         if ($record->biometricData) {
             MetricInterpreterService::handle(
                 $record->biometricData->toArray(),
                 $record->id
             );
         }
+
+        $record->refresh(); // Garante que os dados estejam atualizados
+        $record->updateQuietly([
+            'evolution_text' => $record->generateEvolutionText(),
+        ]);
+
+
     }
 }
