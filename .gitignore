@@ -7,6 +7,11 @@
 /storage/pail
 /vendor
 .env
+.env.save
+Dockerfile
+nginx.conf
+php.ini
+supervisord.conf
 .env.backup
 .env.production
 .phpactor.json
