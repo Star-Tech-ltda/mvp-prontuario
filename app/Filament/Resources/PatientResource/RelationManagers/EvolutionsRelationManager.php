@@ -9,8 +9,10 @@ use App\Models\Patient;
 use App\Services\MetricInterpreterService;
 use Filament\Forms;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -18,11 +20,13 @@ use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Wizard\Step;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
 
 class EvolutionsRelationManager extends RelationManager
 {
@@ -192,40 +196,96 @@ class EvolutionsRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                Tables\Actions\Action::make('View Information')
+
+                Tables\Actions\Action::make('viewInformation')
                     ->label('Detalhes')
                     ->color('slate')
                     ->icon('heroicon-s-eye')
-                    ->infolist([
-                        \Filament\Infolists\Components\Section::make('Evolução')
-                            ->schema([
-                                TextEntry::make('evolution_text')
-                                    ->label(''),
-                            ]),
-                        \Filament\Infolists\Components\Grid::make(2)
-                            ->schema([
-                                TextEntry::make('created_at')->label('Realizada em:'),
-                                ...(!empty($record->observation) ? [
-                                    TextEntry::make('observation')->label('Observações:'),
-                                ] : []),
+                    ->form([
 
-                            ]),
+                        RichEditor::make('evolution_text')
+                            ->label('Evolução')
+                            ->disabled()
+                            ->hiddenLabel()
+                            ->columnSpanFull(),
+
+                        TextInput::make('ai_question')
+                            ->label('Pergunta para a IA sobre a evolução')
+                            ->placeholder('EX: Qual plano de cuidado para esse paciente?')
+                            ->suffixAction(
+                                \Filament\Forms\Components\Actions\Action::make('gerarResposta')
+                                    ->label('Gerar resposta')
+                                    ->icon('heroicon-m-sparkles')
+                                    ->action(function ($state, $livewire, $get, $set) {
+                                        $evolutionText = $get('evolution_text') ?? '';
+                                        $question = $state;
+
+                                        $prompt = "Evolução do paciente: {$evolutionText}\nPergunta: {$question}\nResponda com um texto formatado em HTML para exibir em um editor visual. Use <p>, <ul>, <strong> e títulos como <h3> quando fizer sentido.";
+
+                                        $resposta = Http::withToken(env('OPENAI_API_KEY'))
+                                            ->post('https://api.openai.com/v1/chat/completions', [
+                                                'model' => 'gpt-3.5-turbo',
+                                                'messages' => [
+                                                    ['role' => 'user', 'content' => $prompt],
+                                                ],
+                                            ])->json()['choices'][0]['message']['content'] ?? 'Erro ao gerar resposta.';
+
+                                        $set('ai_suggestion', $resposta);
+                                    })
+
+                            )->helperText('Essa pergunta será enviada para a IA e a resposta será exibida na tela'),
+
+                        Fieldset::make('Sugestão da IA')
+                            ->schema([
+                                RichEditor::make('ai_suggestion')
+                                    ->label('Resposta da IA')
+                                    ->hiddenLabel()
+                                    ->columnSpanFull(),
+
+                                \Filament\Forms\Components\Actions::make([
+                                    \Filament\Forms\Components\Actions\Action::make('salvarSugestaoIa')
+                                        ->label('Salvar sugestão')
+                                        ->color('success')
+                                        ->icon('heroicon-m-check-circle')
+                                        ->action(function ($get, $livewire) {
+                                            $sugestao = $get('ai_suggestion');
+                                            $record = $livewire->getMountedTableActionRecord();
+
+                                            if (! $record) {
+                                                Notification::make()
+                                                    ->title('Registro não encontrado.')
+                                                    ->danger()
+                                                    ->send();
+                                                return;
+                                            }
+
+                                            $record->ai_suggestion = $sugestao;
+                                            $record->save();
+
+                                            Notification::make()
+                                                ->title('Sugestão salva com sucesso!')
+                                                ->success()
+                                                ->send();
+                                        })
+
+                                ])
+                                    ->alignEnd()
+                                    ->columnSpanFull(),
+                            ])
+                            ->columnSpanFull(),
+                    ])
+                    ->fillForm(fn ($record) => [
+                        'evolution_text' => $record->evolution_text,
+                        'ai_suggestion' => $record->ai_suggestion,
 
                     ])
                     ->modalSubmitAction(false)
                     ->modalCancelAction(
                         fn($action)=>$action->label('Fechar')
                     ),
-                Tables\Actions\EditAction::make()
-                    ->mutateRecordDataUsing(function (array $data, Evolution $record): array {
-                        return $this->prepareFormDataForEdit($data, $record);
-                    })
-                    ->after(function (Evolution $record, array $data) {
-                        $this->handleAssessmentOptions($record, $data);
-                        $this->handleBiometricData($record, $data);
-                        $this->generateEvolutionText($record);
-                    }),
+                Tables\Actions\EditAction::make()->color('amber'),
                 Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -13,6 +13,7 @@ use App\Models\Evolution;
 use App\Models\Patient;
 use App\Services\MetricInterpreterService;
 use Carbon\Carbon;
+use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
@@ -114,7 +115,11 @@ class EvolutionResource extends Resource
 
                                         Section::make('Dados do paciente')->schema([
                                             Grid::make(2)->schema([
-                                                TextInput::make('age')->label('Idade')->numeric()->readOnly(),
+                                                TextInput::make('age')
+                                                    ->label('Idade')
+                                                    ->numeric()
+                                                    ->readOnly()
+                                                    ,
                                                 Placeholder::make('diagnostico')
                                                     ->label('Diagnóstico')
                                                     ->content(fn ($get, $livewire) => $livewire->data['temp_diagnosis'] ?? 'Não possui HDM'),
@@ -123,24 +128,60 @@ class EvolutionResource extends Resource
 
                                         Section::make('Pressão Arterial')->schema([
                                             Grid::make(2)->schema([
-                                                TextInput::make('systolic_pressure')->label('Pressão Sistólica')->numeric(),
-                                                TextInput::make('diastolic_pressure')->label('Pressão Diastólica')->numeric(),
+                                                TextInput::make('systolic_pressure')
+                                                    ->label('Pressão Sistólica')
+                                                    ->numeric()
+                                                    ->suffix('mmHg'),
+                                                TextInput::make('diastolic_pressure')
+                                                    ->label('Pressão Diastólica')
+                                                    ->numeric()
+                                                    ->suffix('mmHg'),
                                             ])
                                         ]),
 
                                         Section::make('Frequências')->schema([
                                             Grid::make(3)->schema([
-                                                TextInput::make('heart_rate')->label('Frequência Cardíaca')->numeric(),
-                                                TextInput::make('respiratory_rate')->label('Frequência Respiratória')->numeric(),
-                                                TextInput::make('oxygen_saturation')->label('Saturação de O2')->numeric(),
+                                                TextInput::make('heart_rate')
+                                                    ->label('Frequência Cardíaca')
+                                                    ->numeric()
+                                                    ->suffixIcon('mdi-heart-pulse'),
+                                                TextInput::make('respiratory_rate')
+                                                    ->label('Frequência Respiratória')
+                                                    ->numeric()
+                                                    ->suffix('rpm')
+                                                    ->suffixIcon('mdi-lungs'),
+                                                TextInput::make('oxygen_saturation')
+                                                    ->label('Saturação de O2')
+                                                    ->numeric()
+                                                    ->suffix('%/O2'),
                                             ])
                                         ]),
 
                                         Section::make('Medidas Corporais')->schema([
                                             Grid::make(3)->schema([
-                                                TextInput::make('height')->label('Altura (cm)')->numeric()->step(0.01),
-                                                TextInput::make('weight')->label('Peso (kg)')->numeric()->step(0.01),
-                                                TextInput::make('temperature')->label('Temperatura')->numeric(),
+                                                TextInput::make('height')
+                                                    ->label('Altura (cm)')
+                                                    ->numeric()
+                                                    ->step(0.01)
+                                                    ->extraInputAttributes([
+                                                        'min' => 0,
+                                                    ])
+                                                    ->suffixIcon('mdi-human-male-height-variant'),
+                                                TextInput::make('weight')
+                                                    ->label('Peso (kg)')
+                                                    ->numeric()
+                                                    ->step(0.01)
+                                                    ->extraInputAttributes([
+                                                        'min' => 0,
+                                                    ])
+                                                    ->suffixIcon('mdi-weight-kilogram'),
+                                                TextInput::make('temperature')
+                                                    ->label('Temperatura')
+                                                    ->numeric()
+                                                    ->suffixIcon('mdi-temperature-celsius')
+                                                    ->extraInputAttributes([
+                                                        'min' => 0,
+                                                    ]),
                                             ])
                                         ]),
 
