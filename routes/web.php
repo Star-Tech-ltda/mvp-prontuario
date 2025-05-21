@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EvolutionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -15,3 +16,7 @@ Artisan::command('logs:clear', function() {
     $this->comment('Logs have been cleared!');
 
 })->describe('Clear log files');
+
+
+
+Route::get('/evolution/download/{record}', [EvolutionController::class, 'downloadPdf'])->name('evolution.download');

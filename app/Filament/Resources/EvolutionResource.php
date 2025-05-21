@@ -17,6 +17,7 @@ use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
@@ -318,7 +319,16 @@ class EvolutionResource extends Resource
                                                 ->title('Sugestão salva com sucesso!')
                                                 ->success()
                                                 ->send();
-                                        })
+                                        }),
+
+                                    \Filament\Forms\Components\Actions\Action::make('baixar_pdf')
+                                            ->label('Baixar Sugestão')
+                                            ->icon('heroicon-o-document-arrow-down')
+                                            ->outlined()
+                                            ->tooltip('Baixar PDF da Sugestão da IA')
+                                            ->url(fn($record) => route('evolution.download', ['record' => $record]))
+                                            ->openUrlInNewTab(),
+
 
                                 ])
                                     ->alignEnd()
