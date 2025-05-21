@@ -2,11 +2,13 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Responses\CustomLoginResponse;
 use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Http\Responses\Auth\LoginResponse;
 use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
@@ -28,6 +30,9 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->bootUsing( function (){
+                app()->bind(LoginResponse::class, CustomLoginResponse::class);
+            })
             ->sidebarCollapsibleOnDesktop()
             ->default()
             ->id('admin')
