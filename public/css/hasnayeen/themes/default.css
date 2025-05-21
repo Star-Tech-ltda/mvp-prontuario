@@ -962,7 +962,7 @@ html {
     font-size: 16px !important;
 }
 .fi-avatar{
-    border: 2px solid #fff;
+    box-shadow: 0 0 4px 1px #f59e0b !important;
     height:48px !important;
     width: 48px !important;
 }

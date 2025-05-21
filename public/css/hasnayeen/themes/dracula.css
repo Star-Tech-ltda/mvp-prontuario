@@ -1037,3 +1037,9 @@ body {
     --tw-bg-opacity: 1;
     background-color: rgba(var(--gray-900), var(--tw-bg-opacity))
 }
+
+.fi-avatar{
+    box-shadow: 0 0 4px 1px rgba(var(--primary-500)) !important;
+    height:48px !important;
+    width: 48px !important;
+}
