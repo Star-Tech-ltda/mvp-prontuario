@@ -65,7 +65,10 @@ class User extends Authenticatable implements HasAvatar
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return asset('storage/'.$this->avatar_url);
+        if ($this->avatar_url) {
+            return asset('storage/'.$this->avatar_url);
+        }
+        return null;
     }
 
     public function isAdmin(): bool
